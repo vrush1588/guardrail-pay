@@ -1,0 +1,129 @@
+{
+  "b5bd304e0554bb51": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-10-31T15:12:22+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight, don't tell his parents"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Mike Turner before.",
+        "This payment is much larger than your usual payments.",
+        "The note asks you to hurry.",
+        "The note says your grandson needs bail money.",
+        "The note asks you to keep this a secret from his parents."
+      ],
+      "reason": "This payment has many signs of a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent, secret bail money for a relative."
+    }
+  },
+  "1b3324fcdd18957d": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-10-31T15:12:25+00:00",
+    "input": {
+      "sender": "Leo (age 12)",
+      "recipient_name": "School Cafe",
+      "recipient_is_new": false,
+      "amount": 5.0,
+      "currency": "USD",
+      "usual_amount": 10.0,
+      "local_hour": "day",
+      "note": "Lunch"
+    },
+    "result": {
+      "risk_level": "low",
+      "signals": [],
+      "reason": "This payment looks normal and safe."
+    }
+  },
+  "adbe730c4e0a45ad": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-10-31T15:12:29+00:00",
+    "input": {
+      "sender": "Leo (age 12)",
+      "recipient_name": "GameWorld Store",
+      "recipient_is_new": false,
+      "amount": 60.0,
+      "currency": "USD",
+      "usual_amount": 10.0,
+      "local_hour": "late_night",
+      "note": "Skin pack for my game"
+    },
+    "result": {
+      "risk_level": "medium",
+      "signals": [
+        "This payment is much larger than what you usually send to GameWorld Store.",
+        "You are sending this money late at night."
+      ],
+      "reason": "This payment is for a much larger amount than usual and is happening late at night, which can sometimes lead to regrettable purchases."
+    }
+  },
+  "1dc7ffdc801ddaf1": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-10-31T15:12:32+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": false,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "The amount you are sending is much larger than you usually send to Mike.",
+        "The note asks for money urgently.",
+        "The note says your grandson needs bail money, which is a common scam."
+      ],
+      "reason": "This payment looks like a scam because the amount is much higher than usual and the note mentions an urgent request for bail money for your grandson."
+    }
+  },
+  "d128ce3eeb2d3f6b": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-10-31T15:12:36+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "City Pharmacy",
+      "recipient_is_new": false,
+      "amount": 25.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Monthly prescription"
+    },
+    "result": {
+      "risk_level": "low",
+      "signals": [],
+      "reason": "This looks like a normal payment for a monthly prescription."
+    }
+  },
+  "aaa85adacf4bae79": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-10-31T15:12:39+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Alex (grandson)",
+      "recipient_is_new": false,
+      "amount": 40.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Birthday money"
+    },
+    "result": {
+      "risk_level": "low",
+      "signals": [],
+      "reason": "This payment looks normal and is for a common reason."
+    }
+  }
+}

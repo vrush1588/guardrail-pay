@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+
+<html lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" name="viewport"/><meta content="mobile_tab" name="shell-type"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { colors: { "on-secondary-container": "#5c647a", "surface-container-low": "#eff4ff", "tertiary-container": "#ba0035", "on-tertiary-fixed-variant": "#920028", "on-secondary-fixed": "#131b2e", "on-secondary": "#ffffff", "surface-container-lowest": "#ffffff", "tertiary-fixed-dim": "#ffb3b6", "primary-fixed": "#dce1ff", "on-primary-fixed-variant": "#0039b5", "surface-container": "#e5eeff", "secondary-fixed": "#dae2fd", "surface-variant": "#d3e4fe", "on-tertiary-container": "#ffc7c9", "secondary-fixed-dim": "#bec6e0", "on-tertiary": "#ffffff", "on-background": "#0b1c30", "primary": "#0037b0", "background": "#f8f9ff", "on-primary-container": "#cad3ff", "error-container": "#ffdad6", "on-surface-variant": "#434655", "primary-container": "#1d4ed8", "surface": "#f8f9ff", "inverse-on-surface": "#eaf1ff", "on-surface": "#0b1c30", "surface-tint": "#2151da", "tertiary": "#8e0026", "surface-dim": "#cbdbf5", "on-primary": "#ffffff", "surface-container-highest": "#d3e4fe", "on-primary-fixed": "#001551", "outline": "#747686", "on-secondary-fixed-variant": "#3f465c", "inverse-primary": "#b7c4ff", "secondary-container": "#dae2fd", "primary-fixed-dim": "#b7c4ff", "surface-bright": "#f8f9ff", "on-error": "#ffffff", "tertiary-fixed": "#ffdada", "error": "#ba1a1a", "on-tertiary-fixed": "#40000c", "on-error-container": "#93000a", "secondary": "#565e74", "surface-container-high": "#dce9ff", "inverse-surface": "#213145", "outline-variant": "#c4c5d7" }, borderRadius: { DEFAULT: "0.125rem", lg: "0.25rem", xl: "0.5rem", full: "0.75rem" }, spacing: { "space-xs": "0.25rem", "gutter-mobile": "1rem", "space-sm": "0.5rem", "space-xl": "2.5rem", "margin-mobile": "1rem", "space-md": "1rem", "margin": "2rem", "gutter": "1.5rem", "space-lg": "1.5rem" }, fontFamily: { "headline-lg-mobile": ["Inter"], "headline-lg": ["Inter"], "label-sm": ["Inter"], "label-lg": ["Inter"], "label-md": ["Inter"], "body-sm": ["Inter"], "body-md": ["Inter"], "display": ["Inter"], "body-lg": ["Inter"], "headline-sm": ["Inter"], "headline-md": ["Inter"] }, fontSize: { "headline-lg-mobile": ["1.625rem", { lineHeight: "2.125rem", letterSpacing: "-0.02em", fontWeight: "600" }], "headline-lg": ["2rem", { lineHeight: "2.5rem", letterSpacing: "-0.025em", fontWeight: "600" }], "label-sm": ["0.6875rem", { lineHeight: "1rem", letterSpacing: "0.04em", fontWeight: "600" }], "label-lg": ["0.9375rem", { lineHeight: "1.25rem", fontWeight: "500" }], "label-md": ["0.8125rem", { lineHeight: "1.125rem", fontWeight: "500" }], "body-sm": ["0.8125rem", { lineHeight: "1.25rem", fontWeight: "400" }], "body-md": ["0.9375rem", { lineHeight: "1.5rem", fontWeight: "400" }], "display": ["2.75rem", { lineHeight: "3.25rem", letterSpacing: "-0.03em", fontWeight: "700" }], "body-lg": ["1.0625rem", { lineHeight: "1.625rem", fontWeight: "400" }], "headline-sm": ["1.125rem", { lineHeight: "1.625rem", letterSpacing: "-0.01em", fontWeight: "600" }], "headline-md": ["1.375rem", { lineHeight: "1.875rem", letterSpacing: "-0.015em", fontWeight: "600" }] } } } }</script><style>@layer base { html, body { width: 100vw; margin: 0; padding: 0; min-height: 100%; } body { overscroll-behavior-y: none; } .pb-safe { padding-bottom: env(safe-area-inset-bottom, 0px); } .pt-safe { padding-top: env(safe-area-inset-top, 0px); } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; }</style><style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head><body class="bg-surface text-on-surface flex flex-col min-h-screen"><header class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)] pt-safe"><div class="h-16 px-gutter-mobile flex items-center justify-between gap-space-sm"><div class="flex items-center gap-space-sm min-w-0"><div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[20px]">verified_user</span></div><div class="flex flex-col min-w-0"><span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Shield Active</span><h1 class="font-headline-sm text-headline-sm text-on-surface truncate">Family Guardian</h1></div></div><div class="flex items-center gap-space-xs shrink-0"><button aria-label="Emergency Freeze Payments" class="min-h-[44px] min-w-[44px] px-space-sm rounded-lg bg-error-container text-on-error-container flex items-center justify-center gap-space-xs transition-colors hover:bg-error hover:text-on-error" type="button"><span class="material-symbols-outlined text-[18px]">pause_circle</span><span class="font-label-sm text-label-sm">Freeze</span></button><div class="w-8 h-8 rounded-full bg-primary flex items-center justify-center shrink-0"><span class="material-symbols-outlined text-on-primary text-[18px]">person</span></div></div></div></header><main class="flex-1 flex flex-col relative w-full pt-16 pb-20 bg-surface"><div class="flex flex-col w-full px-gutter-mobile py-space-sm space-y-space-md">
+<!-- Live Telemetry & Control Strip -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md flex flex-col gap-space-sm">
+<div class="flex items-center justify-between">
+<div class="flex items-center gap-space-xs">
+<span class="relative flex h-2.5 w-2.5">
+<span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+<span class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+</span>
+<span class="font-label-sm text-label-sm text-secondary uppercase tracking-wider">Real-time active guardrail</span>
+</div>
+<div class="flex items-center gap-1.5 bg-tertiary-container/10 px-2.5 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+<span class="font-label-sm text-label-sm text-tertiary font-semibold">2 Pending</span>
+</div>
+</div>
+<div class="flex items-center justify-between pt-space-xs">
+<div class="flex flex-col">
+<span class="font-headline-sm text-headline-sm text-on-surface">Needs your decision</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">2 outbound requests intercepted</span>
+</div>
+<button class="min-h-[44px] px-3.5 bg-surface-container-high hover:bg-error-container text-on-surface active:scale-95 rounded-lg flex items-center gap-1.5 transition-all shadow-sm" id="pauseAllBtn" onclick="toggleGlobalFreeze(this)" type="button">
+<span class="material-symbols-outlined text-error text-[18px]">pause_circle</span>
+<span class="font-label-md text-label-md font-semibold text-on-surface">Pause all</span>
+</button>
+</div>
+</div>
+<!-- Priority Alert Card 1: Grandma Rose (Scam Intercept) -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md flex flex-col space-y-space-sm transition-all" id="alertCardRose">
+<!-- Header Row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-tertiary-container/15 text-tertiary flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-bold">
+          GR
+        </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Grandma Rose</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Chase Checking • 4 mins ago</span>
+</div>
+</div>
+<div class="bg-error-container text-on-error-container px-2 py-1 rounded-md flex items-center gap-1 shrink-0">
+<span class="material-symbols-outlined text-[15px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-sm text-label-sm font-bold uppercase tracking-tight">High Risk</span>
+</div>
+</div>
+<!-- Payment Highlight Details -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Interception Request</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold text-tertiary">$800.00</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">To Mike Turner (new external account)</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[20px]">send_money</span>
+</div>
+</div>
+<!-- AI Intelligence Insight -->
+<div class="bg-tertiary-fixed-dim/30 rounded-lg p-space-sm flex items-start gap-2.5">
+<div class="p-1 rounded-md bg-tertiary text-on-tertiary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">smart_toy</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm font-bold text-on-tertiary-fixed-variant uppercase">Shield AI Intelligence</span>
+<p class="font-body-sm text-body-sm text-on-surface mt-0.5 leading-snug">
+          Urgent message mentions unexpected "bail money". Telemetry pattern matches high-frequency family impersonation scam with 97% confidence.
+        </p>
+</div>
+</div>
+<!-- Ergonomic Mobile Action Zone -->
+<div class="flex flex-col gap-space-xs pt-space-xs">
+<!-- Full-Width Mobile Hero Action -->
+<a class="w-full min-h-[48px] bg-primary text-on-primary rounded-lg flex items-center justify-center gap-2 font-label-lg text-label-lg font-semibold shadow-sm active:scale-[0.99] transition-transform" href="tel:5550192834">
+<span class="material-symbols-outlined text-[20px]">phone_in_talk</span>
+        Call Grandma first (Direct)
+      </a>
+<!-- Secondary Dual Action Buttons -->
+<div class="grid grid-cols-2 gap-space-xs">
+<button class="min-h-[44px] bg-tertiary-container/15 hover:bg-tertiary-container/25 text-tertiary rounded-lg font-label-md text-label-md font-semibold flex items-center justify-center gap-1 active:scale-95 transition-all" onclick="resolveAlert('alertCardRose', 'Cancelled payment of $800 to Mike Turner safely.')" type="button">
+<span class="material-symbols-outlined text-[18px]">cancel</span>
+          Cancel payment
+        </button>
+<button class="min-h-[44px] bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-lg font-label-md text-label-md font-medium flex items-center justify-center gap-1 active:scale-95 transition-all" onclick="confirmOverride('Grandma Rose', '$800.00')" type="button">
+<span class="material-symbols-outlined text-[18px]">check_circle</span>
+          Override &amp; approve
+        </button>
+</div>
+</div>
+</div>
+<!-- Priority Alert Card 2: Sam (Bedtime Curfew Hold) -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md flex flex-col space-y-space-sm transition-all" id="alertCardSam">
+<!-- Header Row -->
+<div class="flex items-start justify-between gap-space-xs">
+<div class="flex items-center gap-space-sm min-w-0">
+<div class="w-11 h-11 rounded-xl bg-secondary-container text-on-secondary-container flex items-center justify-center font-headline-sm text-headline-sm shrink-0 font-bold">
+          S
+        </div>
+<div class="flex flex-col min-w-0">
+<div class="flex items-center gap-1.5">
+<h2 class="font-headline-sm text-headline-sm text-on-surface truncate">Sam (age 10)</h2>
+</div>
+<span class="font-label-sm text-label-sm text-on-surface-variant truncate">Sam's Debit (*4092) • 11:04 PM</span>
+</div>
+</div>
+<div class="bg-surface-container-high text-secondary px-2 py-1 rounded-md flex items-center gap-1 shrink-0">
+<span class="material-symbols-outlined text-[15px]">schedule</span>
+<span class="font-label-sm text-label-sm font-semibold uppercase tracking-tight">Curfew Hold</span>
+</div>
+</div>
+<!-- Purchase Context -->
+<div class="bg-surface-container-low rounded-lg p-space-sm flex items-center justify-between">
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm text-secondary uppercase">Digital In-Game Bundle</span>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold text-primary">$60.00</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">GameWorld Store - Microtransaction</span>
+</div>
+<div class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center text-on-surface shrink-0">
+<span class="material-symbols-outlined text-[20px]">sports_esports</span>
+</div>
+</div>
+<!-- Rule Trigger Notification -->
+<div class="bg-surface-container rounded-lg p-space-sm flex items-start gap-2.5">
+<div class="p-1 rounded-md bg-secondary text-on-secondary shrink-0 mt-0.5">
+<span class="material-symbols-outlined text-[16px]">bedtime</span>
+</div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-sm text-label-sm font-semibold text-on-secondary-fixed uppercase">Curfew Rule Triggered</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-0.5 leading-snug">
+          Transaction attempted outside permitted daytime hours (bedtime protocol starts at 9:00 PM). Automatic 12-hour cooling-off hold engaged.
+        </p>
+</div>
+</div>
+<!-- Touch Actions -->
+<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
+<button class="min-h-[44px] bg-surface-container-high hover:bg-surface-container-highest text-on-surface rounded-lg font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition-all" onclick="resolveAlert('alertCardSam', 'Sam\'s purchase cancelled. Cooling-off locked.')" type="button">
+<span class="material-symbols-outlined text-[18px]">block</span>
+        Cancel payment
+      </button>
+<button class="min-h-[44px] bg-primary hover:bg-primary-container text-on-primary rounded-lg font-label-md text-label-md font-semibold flex items-center justify-center gap-1.5 active:scale-95 transition-all shadow-sm" onclick="resolveAlert('alertCardSam', 'Approved one-time purchase for Sam ($60.00).')" type="button">
+<span class="material-symbols-outlined text-[18px]">check</span>
+        Approve once
+      </button>
+</div>
+</div>
+<!-- Quick Daily Protection Metrics -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md flex flex-col space-y-space-sm">
+<div class="flex items-center justify-between">
+<span class="font-label-sm text-label-sm uppercase tracking-wider text-secondary">Today's Shield Telemetry</span>
+<span class="font-label-sm text-label-sm text-primary font-medium">Synced just now</span>
+</div>
+<div class="grid grid-cols-3 gap-2">
+<div class="bg-surface-container-low rounded-lg p-2.5 flex flex-col items-center text-center">
+<div class="w-7 h-7 rounded-full bg-surface-container-high text-primary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[16px]">verified</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">12</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none mt-0.5">Inspected</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2.5 flex flex-col items-center text-center">
+<div class="w-7 h-7 rounded-full bg-secondary-container text-secondary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[16px]">pause</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-on-surface font-bold">2</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none mt-0.5">Held review</span>
+</div>
+<div class="bg-surface-container-low rounded-lg p-2.5 flex flex-col items-center text-center">
+<div class="w-7 h-7 rounded-full bg-tertiary-container/15 text-tertiary flex items-center justify-center mb-1">
+<span class="material-symbols-outlined text-[16px]">security</span>
+</div>
+<span class="font-headline-sm text-headline-sm text-tertiary font-bold">$800</span>
+<span class="font-label-sm text-label-sm text-on-surface-variant leading-none mt-0.5">Prevented</span>
+</div>
+</div>
+</div>
+<!-- Family Members Status Overview -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md flex flex-col space-y-space-sm">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Family Guardrails</h3>
+<span class="font-label-sm text-label-sm text-secondary">3 Protected</span>
+</div>
+<div class="space-y-space-xs">
+<!-- Member 1 -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-tertiary-container/15 text-tertiary flex items-center justify-center font-bold text-label-lg shrink-0">
+            GR
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-medium truncate">Grandma Rose</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Limit $200 / recipient</span>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-error-container text-on-error-container font-label-sm text-label-sm rounded-md whitespace-nowrap">
+          1 Alert active
+        </span>
+</div>
+<!-- Member 2 -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-secondary-container text-on-secondary-container flex items-center justify-center font-bold text-label-lg shrink-0">
+            S
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-medium truncate">Sam</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Limit $20 / day • Bedtime on</span>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-secondary-container text-on-secondary-container font-label-sm text-label-sm rounded-md whitespace-nowrap">
+          Curfew active
+        </span>
+</div>
+<!-- Member 3 (Guardian) -->
+<div class="p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between gap-2">
+<div class="flex items-center gap-2.5 min-w-0">
+<div class="w-9 h-9 rounded-lg bg-primary-container text-on-primary flex items-center justify-center font-bold text-label-lg shrink-0">
+            D
+          </div>
+<div class="flex flex-col min-w-0">
+<span class="font-label-lg text-label-lg text-on-surface font-medium truncate">Dad (You)</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant truncate">Master Approval Authority</span>
+</div>
+</div>
+<span class="px-2 py-0.5 bg-surface-container-high text-on-surface-variant font-label-sm text-label-sm rounded-md whitespace-nowrap">
+          Admin
+        </span>
+</div>
+</div>
+</div>
+<!-- Recent Live Activity Stream -->
+<div class="bg-surface-container-lowest shadow-sm rounded-xl p-space-md flex flex-col space-y-space-sm mb-space-sm">
+<div class="flex items-center justify-between">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Recent Activity Log</h3>
+<span class="font-label-sm text-label-sm text-secondary">Real-time ledger</span>
+</div>
+<div class="relative pl-6 space-y-3.5 before:content-[''] before:absolute before:left-2.5 before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container-highest">
+<!-- Item 1 -->
+<div class="relative flex items-start justify-between gap-2">
+<span class="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-tertiary"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">Payment to Mike Turner held</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Shield flagged suspicious recipient</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap shrink-0">11:18 AM</span>
+</div>
+<!-- Item 2 -->
+<div class="relative flex items-start justify-between gap-2">
+<span class="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-primary"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">Guardian alerted via Push</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Priority notification dispatched</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap shrink-0">11:18 AM</span>
+</div>
+<!-- Item 3 -->
+<div class="relative flex items-start justify-between gap-2">
+<span class="absolute -left-6 top-1 w-2.5 h-2.5 rounded-full bg-surface-tint"></span>
+<div class="flex flex-col min-w-0">
+<span class="font-label-md text-label-md font-semibold text-on-surface truncate">$5.00 School Cafe Approved</span>
+<span class="font-body-sm text-body-sm text-on-surface-variant">Auto-cleared: Trusted daily vendor</span>
+</div>
+<span class="font-label-sm text-label-sm text-secondary whitespace-nowrap shrink-0">10:45 AM</span>
+</div>
+</div>
+</div>
+<!-- Interactive Feedback Toast -->
+<div class="fixed bottom-24 left-4 right-4 bg-inverse-surface text-inverse-on-surface p-space-sm rounded-xl shadow-lg flex items-center justify-between gap-space-sm opacity-0 pointer-events-none transition-all duration-300 z-50" id="toastNotification">
+<div class="flex items-center gap-2 min-w-0">
+<span class="material-symbols-outlined text-primary-fixed text-[20px]">check_circle</span>
+<span class="font-body-sm text-body-sm truncate" id="toastMsg">Action completed successfully</span>
+</div>
+<button class="text-inverse-on-surface hover:text-white shrink-0 p-1" onclick="hideToast()">
+<span class="material-symbols-outlined text-[18px]">close</span>
+</button>
+</div>
+<!-- Confirmation Modal for Override -->
+<div class="fixed inset-0 bg-on-background/40 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-gutter-mobile opacity-0 pointer-events-none transition-opacity duration-200" id="overrideDialog">
+<div class="bg-surface-container-lowest w-full max-w-sm rounded-xl p-space-md shadow-xl flex flex-col space-y-space-sm">
+<div class="flex items-center gap-space-xs text-tertiary">
+<span class="material-symbols-outlined text-[24px]">gpp_maybe</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Confirm Safety Override</h4>
+</div>
+<p class="font-body-md text-body-md text-on-surface-variant" id="dialogDescription">
+        Are you sure you want to approve this high-risk transaction?
+      </p>
+<div class="grid grid-cols-2 gap-space-xs pt-space-xs">
+<button class="min-h-[44px] bg-surface-container text-on-surface rounded-lg font-label-md text-label-md font-semibold" onclick="closeOverrideDialog()" type="button">
+          Cancel
+        </button>
+<button class="min-h-[44px] bg-tertiary text-on-tertiary rounded-lg font-label-md text-label-md font-semibold" onclick="executeOverride()" type="button">
+          Yes, Override
+        </button>
+</div>
+</div>
+</div>
+</div>
+<script>
+  let pendingCardId = null;
+
+  function showToast(message) {
+    const toast = document.getElementById('toastNotification');
+    const msg = document.getElementById('toastMsg');
+    if (!toast || !msg) return;
+    msg.textContent = message;
+    toast.classList.remove('opacity-0', 'pointer-events-none');
+    toast.classList.add('opacity-100');
+    setTimeout(() => {
+      hideToast();
+    }, 3800);
+  }
+
+  function hideToast() {
+    const toast = document.getElementById('toastNotification');
+    if (toast) {
+      toast.classList.add('opacity-0', 'pointer-events-none');
+      toast.classList.remove('opacity-100');
+    }
+  }
+
+  function resolveAlert(cardId, message) {
+    const card = document.getElementById(cardId);
+    if (card) {
+      card.style.opacity = '0.4';
+      card.style.transform = 'scale(0.98)';
+      setTimeout(() => {
+        card.innerHTML = `
+          <div class="flex items-center justify-between p-2 text-on-surface-variant">
+            <div class="flex items-center gap-2">
+              <span class="material-symbols-outlined text-primary text-[20px]">task_alt</span>
+              <span class="font-body-sm text-body-sm">${message}</span>
+            </div>
+            <span class="font-label-sm text-label-sm text-secondary">Resolved</span>
+          </div>
+        `;
+        card.style.opacity = '1';
+        card.style.transform = 'scale(1)';
+      }, 250);
+    }
+    showToast(message);
+  }
+
+  function confirmOverride(userName, amount) {
+    pendingCardId = 'alertCardRose';
+    const dialog = document.getElementById('overrideDialog');
+    const desc = document.getElementById('dialogDescription');
+    if (desc) {
+      desc.textContent = `You are overriding Shield AI protection for ${userName} (${amount}). This payment will release immediately.`;
+    }
+    if (dialog) {
+      dialog.classList.remove('opacity-0', 'pointer-events-none');
+      dialog.classList.add('opacity-100');
+    }
+  }
+
+  function closeOverrideDialog() {
+    const dialog = document.getElementById('overrideDialog');
+    if (dialog) {
+      dialog.classList.add('opacity-0', 'pointer-events-none');
+      dialog.classList.remove('opacity-100');
+    }
+    pendingCardId = null;
+  }
+
+  function executeOverride() {
+    closeOverrideDialog();
+    if (pendingCardId) {
+      resolveAlert(pendingCardId, 'Safety override logged. Payment released.');
+    }
+  }
+
+  let allFrozen = false;
+  function toggleGlobalFreeze(button) {
+    allFrozen = !allFrozen;
+    if (allFrozen) {
+      button.classList.remove('bg-surface-container-high', 'text-on-surface');
+      button.classList.add('bg-tertiary', 'text-on-tertiary');
+      button.innerHTML = `
+        <span class="material-symbols-outlined text-[18px]">play_arrow</span>
+        <span class="font-label-md text-label-md font-semibold">Resume</span>
+      `;
+      showToast('All household outbound payments paused.');
+    } else {
+      button.classList.remove('bg-tertiary', 'text-on-tertiary');
+      button.classList.add('bg-surface-container-high', 'text-on-surface');
+      button.innerHTML = `
+        <span class="material-symbols-outlined text-error text-[18px]">pause_circle</span>
+        <span class="font-label-md text-label-md font-semibold text-on-surface">Pause all</span>
+      `;
+      showToast('Household payments resumed normal monitoring.');
+    }
+  }
+</script></main><nav class="fixed bottom-0 w-full z-50 pb-safe bg-surface/80 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)]" data-active-classes="text-primary font-semibold"><div class="flex justify-around items-center h-20 px-space-xs"><a aria-current="page" class="relative flex flex-col items-center justify-center w-16 h-16 transition-colors text-primary font-semibold" data-path="alerts" href="#"><span class="relative flex items-center justify-center"><span class="material-symbols-outlined text-[24px]">shield</span><span class="absolute -top-0.5 -right-1 w-2.5 h-2.5 rounded-full bg-error ring-2 ring-surface"></span></span><span class="font-label-sm text-label-sm mt-space-xs">Alerts</span></a><a class="flex flex-col items-center justify-center w-16 h-16 text-on-surface-variant hover:text-on-surface transition-colors" data-path="family" href="#"><span class="material-symbols-outlined text-[24px]">group</span><span class="font-label-sm text-label-sm mt-space-xs">Family</span></a><a class="flex flex-col items-center justify-center w-16 h-16 text-on-surface-variant hover:text-on-surface transition-colors" data-path="activity" href="#"><span class="material-symbols-outlined text-[24px]">receipt_long</span><span class="font-label-sm text-label-sm mt-space-xs">Activity</span></a><a class="flex flex-col items-center justify-center w-16 h-16 text-on-surface-variant hover:text-on-surface transition-colors" data-path="settings" href="#"><span class="material-symbols-outlined text-[24px]">tune</span><span class="font-label-sm text-label-sm mt-space-xs">Settings</span></a></div></nav></body></html>

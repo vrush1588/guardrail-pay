@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Family Guardian - Child View</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              50: '#eff6ff',
+              100: '#dbeafe',
+              500: '#3b82f6',
+              600: '#2563eb',
+              700: '#1d4ed8',
+            },
+            softgreen: {
+              50: '#f0fdf4',
+              100: '#dcfce7',
+              500: '#22c55e',
+              600: '#16a34a',
+            }
+          }
+        }
+      }
+    }
+  </script>
+</head>
+<body class="bg-[#f1f5f9] min-h-screen flex items-center justify-center p-4 sm:p-8 font-sans antialiased text-slate-800">
+
+  <!-- Phone Mockup Frame Container (matches Senior view desktop canvas presentation) -->
+  <div class="relative w-[390px] h-[820px] bg-white rounded-[50px] shadow-[0_25px_60px_-15px_rgba(15,23,42,0.18)] border-[10px] border-[#0f172a] overflow-hidden flex flex-col justify-between select-none">
+    
+    <!-- Phone Top Hardware Elements (Dynamic Island / Camera pill) -->
+    <div class="relative pt-3 px-7 flex items-center justify-between text-xs font-semibold text-slate-900 z-20">
+      <span>9:41</span>
+      <!-- Speaker & sensor notch pill -->
+      <div class="w-24 h-5 bg-[#0f172a] rounded-full mx-auto absolute left-1/2 -translate-x-1/2 top-3"></div>
+      <div class="flex items-center space-x-1.5 text-[11px]">
+        <span>5G</span>
+        <!-- Battery Icon -->
+        <svg class="w-5 h-3 text-slate-800" fill="currentColor" viewBox="0 0 24 14">
+          <rect x="1" y="1" width="19" height="12" rx="3" fill="none" stroke="currentColor" stroke-width="2"/>
+          <rect x="3" y="3" width="13" height="8" rx="1.5"/>
+          <path d="M22 5v4" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+      </div>
+    </div>
+
+    <!-- Phone Inner Scrollable / Content Body -->
+    <div class="flex-1 px-6 pt-5 pb-6 flex flex-col justify-between overflow-y-auto">
+      
+      <!-- Top App Bar: Shield Logo + Title -->
+      <div class="flex items-center justify-center space-x-2.5 pb-2">
+        <div class="w-8 h-8 rounded-xl bg-brand-600 flex items-center justify-center text-white shadow-sm shadow-blue-200">
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75M12 3c-4.418 0-8 2.05-8 5.625 0 5.147 4.194 9.174 7.64 10.225a1.18 1.18 0 00.72 0c3.446-1.051 7.64-5.078 7.64-10.225C20 5.05 16.418 3 12 3z"/>
+          </svg>
+        </div>
+        <span class="text-base font-bold tracking-tight text-slate-900">Family Guardian</span>
+      </div>
+
+      <!-- Main Card Area -->
+      <div class="space-y-4 my-auto">
+        
+        <!-- Main Card: Let's check with Mom first -->
+        <div class="bg-blue-50/70 border border-blue-200/80 rounded-3xl p-5 text-center shadow-sm">
+          
+          <!-- Friendly Hourglass Icon Badge -->
+          <div class="w-14 h-14 mx-auto rounded-2xl bg-white text-blue-600 border border-blue-100 flex items-center justify-center shadow-sm mb-3.5">
+            <svg class="w-7 h-7 text-blue-600" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24">
+              <path d="M5 22h14M5 2h14M17 22v-4.172a2 2 0 0 0-.586-1.414L12 12l-4.414 4.414A2 2 0 0 0 7 17.828V22M7 2v4.172a2 2 0 0 0 .586 1.414L12 12l4.414-4.414A2 2 0 0 0 17 6.172V2"/>
+            </svg>
+          </div>
+
+          <!-- Headline -->
+          <h2 class="text-xl font-extrabold text-slate-900 tracking-tight mb-2">
+            Let's check with Mom first
+          </h2>
+
+          <!-- Transaction Context -->
+          <div class="bg-white rounded-2xl py-3 px-4 border border-blue-100 shadow-xs mb-3.5">
+            <p class="text-slate-600 text-sm font-medium">
+              You tried to pay <span class="font-bold text-slate-900 text-base">$60</span> to <span class="font-semibold text-slate-800">GameWorld Store</span>.
+            </p>
+          </div>
+
+          <!-- Friendly Status Box -->
+          <div class="bg-softgreen-50 border border-softgreen-100 rounded-2xl p-3.5 flex items-start space-x-2.5 text-left mb-4">
+            <div class="w-5 h-5 rounded-full bg-softgreen-500 text-white flex items-center justify-center shrink-0 mt-0.5">
+              <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 11-18 0 9 9 0 0118 0z"/>
+              </svg>
+            </div>
+            <p class="text-xs leading-relaxed text-slate-700 font-medium">
+              <span class="font-semibold text-emerald-800">Waiting for Mom to say yes.</span> This usually takes a few minutes.
+            </p>
+          </div>
+
+          <!-- 3-Step Progress Line Component -->
+          <div class="bg-white rounded-2xl p-4 border border-slate-100 shadow-2xs">
+            <div class="relative flex items-center justify-between">
+              
+              <!-- Connecting Line Behind Steps -->
+              <div class="absolute left-6 right-6 top-3.5 h-0.5 bg-slate-200 -z-0">
+                <!-- Completed segment: green -->
+                <div class="h-full bg-emerald-500 w-1/2"></div>
+              </div>
+
+              <!-- Step 1: You asked (Done, green check) -->
+              <div class="relative z-10 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-emerald-500 text-white flex items-center justify-center font-bold shadow-xs">
+                  <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="3" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/>
+                  </svg>
+                </div>
+                <span class="text-[11px] font-semibold text-emerald-700 mt-1.5">You asked</span>
+              </div>
+
+              <!-- Step 2: Mom checks (In progress, blue dot) -->
+              <div class="relative z-10 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center ring-4 ring-blue-100 shadow-xs">
+                  <div class="w-2.5 h-2.5 bg-white rounded-full"></div>
+                </div>
+                <span class="text-[11px] font-bold text-blue-700 mt-1.5">Mom checks</span>
+              </div>
+
+              <!-- Step 3: Payment sent (Gray, pending) -->
+              <div class="relative z-10 flex flex-col items-center">
+                <div class="w-7 h-7 rounded-full bg-slate-200 text-slate-400 flex items-center justify-center">
+                  <div class="w-2 h-2 bg-slate-400 rounded-full"></div>
+                </div>
+                <span class="text-[11px] font-medium text-slate-400 mt-1.5">Payment sent</span>
+              </div>
+
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Action Buttons Footer -->
+      <div class="space-y-3 pt-2">
+        <!-- Outlined Button: Cancel this payment -->
+        <button class="w-full py-3.5 px-4 bg-white hover:bg-slate-50 border-2 border-slate-300 active:border-slate-400 rounded-2xl text-slate-700 font-bold text-sm transition shadow-xs text-center flex items-center justify-center space-x-2">
+          <svg class="w-4 h-4 text-slate-500" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+          <span>Cancel this payment</span>
+        </button>
+
+        <!-- Small Gray Text Link: Why is this held? -->
+        <div class="text-center pb-1">
+          <button class="text-xs font-semibold text-slate-500 hover:text-slate-700 underline decoration-slate-300 underline-offset-4 transition">
+            Why is this held?
+          </button>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Phone Bottom Home Indicator Bar -->
+    <div class="pb-2 pt-1 flex justify-center">
+      <div class="w-32 h-1 bg-slate-300 rounded-full"></div>
+    </div>
+
+  </div>
+
+</body>
+</html>

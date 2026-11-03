@@ -3,10 +3,10 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-Status = Literal["pending_review", "held_for_guardian", "approved", "cancelled"]
+Status = Literal["awaiting_payer", "pending_review", "held_for_guardian", "approved", "cancelled"]
 Verdict = Literal["allow", "hold", "block"]
 RiskLevel = Literal["low", "medium", "high"]
-Actor = Literal["shield", "rules", "guardian"]
+Actor = Literal["paypal", "shield", "rules", "guardian"]
 
 
 def utcnow() -> datetime:
@@ -29,7 +29,9 @@ class Risk(BaseModel):
 
 
 class PayPalRefs(BaseModel):
+    mock: bool = True
     order_id: str | None = None
+    approve_url: str | None = None  # sandbox only: where the payer approves the order
     authorization_id: str | None = None
     capture_id: str | None = None
 

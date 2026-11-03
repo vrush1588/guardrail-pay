@@ -181,6 +181,15 @@
       }, 2000);
     }
 
+    function showPayment(p) {
+      if (p.status === 'approved' || p.status === 'cancelled') {
+        showResult(p.status, p);
+      } else {
+        showAlert(p);
+        watch(p);
+      }
+    }
+
     $('send-form').addEventListener('submit', async (e) => {
       e.preventDefault();
       const form = new FormData(e.target);
@@ -199,12 +208,12 @@
           }),
         });
         console.log('[senior] payment', current);
-        if (current.status === 'approved') {
-          showResult('approved', current);
-        } else {
-          showAlert(current);
-          watch(current);
+        if (current.status === 'awaiting_payer') {
+          // Sandbox: approve on PayPal, which sends us back to /senior.html?payment=<id>
+          window.location.href = current.paypal.approve_url;
+          return;
         }
+        showPayment(current);
       } catch (err) {
         $('form-error').textContent = `Could not send: ${err.message}`;
         $('form-error').classList.remove('hidden');
@@ -248,6 +257,17 @@
       const form = $('send-form');
       Object.entries(FILLS[b.dataset.fill]).forEach(([k, v]) => { form.elements[k].value = v; });
     }));
+
+    // Back from PayPal: show where that payment ended up.
+    const returnedId = new URLSearchParams(location.search).get('payment');
+    if (returnedId) {
+      history.replaceState(null, '', location.pathname);
+      api(`/api/payments/${returnedId}`).then((p) => {
+        console.log('[senior] back from PayPal', p);
+        current = p;
+        showPayment(p);
+      }).catch((err) => console.warn('[senior] could not load payment', err.message));
+    }
   </script>
 </body>
 </html>

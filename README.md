@@ -5,7 +5,8 @@ held, Shield scores it for scam risk, and risky payments wait for a guardian to 
 (capture) or cancel (void).
 
 Shield runs on **Gemini** (`gemini-2.5-flash`) when `GEMINI_API_KEY` is set in `.env`,
-and falls back to offline mock heuristics without it. PayPal is still a **mock**.
+and falls back to offline mock heuristics without it. PayPal is a **mock** by default;
+set `PAYPAL_MODE=sandbox` to use the real PayPal Sandbox (see below).
 
 ## Run it
 
@@ -16,7 +17,7 @@ python -m venv .venv
 # Windows:      .venv\Scripts\activate
 # macOS/Linux:  source .venv/bin/activate
 pip install -r requirements.txt
-cp .env.example .env        # optional for now: nothing reads the keys yet
+cp .env.example .env        # optional: without keys, Shield and PayPal run as mocks
 
 uvicorn app.main:app --reload
 ```
@@ -27,6 +28,22 @@ Then open:
 - Guardian: http://127.0.0.1:8000/guardian.html
 
 API docs: http://127.0.0.1:8000/docs
+
+## Real PayPal Sandbox
+
+1. At https://developer.paypal.com → **Apps & Credentials** (Sandbox) → create an app, and
+   put its Client ID and Secret in `.env` with `PAYPAL_MODE=sandbox`.
+2. Under **Sandbox accounts**, note the default *Personal* account's email and password.
+   That is the "senior" who logs in on PayPal to approve each payment.
+3. Restart the server. Startup prints `PayPal: sandbox ...`, or fails if a key is missing.
+
+Each payment from the senior screen now opens PayPal. The senior logs in with the sandbox
+Personal account and approves, PayPal sends them back, and the funds are authorized (held)
+before Shield scores the payment. Approve captures and Cancel voids, for real, in the
+Sandbox. **Load demo data** always uses the mock, since no one is there to approve.
+
+If PayPal rejects an order because of the account's country or currency, create a US
+sandbox Business account and set it as the app's account, or change `currency`.
 
 ## Demo flow
 
@@ -43,7 +60,8 @@ API docs: http://127.0.0.1:8000/docs
 
 ```
 POST /api/payments
-  -> paypal.create_order + authorize_order   (funds held, nothing sent)
+  -> paypal.create_order                     (sandbox: payer approves on PayPal, back via /api/paypal/return)
+  -> paypal.authorize_order                  (funds held, nothing sent)
   -> shield.score(payment)                   (AI risk: low / medium / high; retry once, then fail -> hold)
   -> apply_guardrails(payment, ai_verdict, rules)
                                              (caps, new payees, cooling-off, pause: can only make it stricter)
@@ -57,7 +75,7 @@ POST /api/payments
 | `app/main.py` | FastAPI app, endpoints, the pipeline, serves `frontend/` |
 | `app/guardrails.py` | **The stricter-only rule** (`apply_guardrails`) |
 | `app/services/shield.py` | Shield: Pydantic-validated JSON, one retry, `ShieldError` on failure. Only `_call_model()` is mock. `# TODO: replace with real Gemini call` |
-| `app/services/paypal.py` | PayPal seam: stubs returning fake ids. `# TODO: replace with real PayPal sandbox calls` |
+| `app/services/paypal.py` | PayPal: OAuth token, Orders v2 (AUTHORIZE), capture, void. `mock=True` returns fake ids |
 | `app/store.py` | In-memory store (resets on restart): payments, audit log, guardian rules, known payees |
 | `app/models.py` | Pydantic models: `Payment`, `Risk`, `ShieldResult`, `GuardianRules`, `AuditEntry` |
 

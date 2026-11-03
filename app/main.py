@@ -9,7 +9,7 @@ from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
 from app import store
-from app.config import BASE_URL, GEMINI_MODEL
+from app.config import BASE_URL, GEMINI_MODEL, PAYPAL_BASE
 from app.guardrails import RULE_PREFIX, apply_guardrails
 from app.models import AuditEntry, GuardianRules, Payment, PaymentCreate, utcnow
 from app.services import paypal, shield
@@ -38,8 +38,10 @@ SEED_SCENARIOS = [
 
 @asynccontextmanager
 async def lifespan(_: FastAPI):
+    paypal.check_config()
     shield_mode = f"Gemini {GEMINI_MODEL}" if shield.USE_GEMINI else "mock (no GEMINI_API_KEY)"
-    print(f"\n  guardrail is running (PayPal: mock, Shield: {shield_mode})")
+    paypal_mode = f"sandbox {PAYPAL_BASE}" if paypal.SANDBOX else "mock"
+    print(f"\n  guardrail is running (PayPal: {paypal_mode}, Shield: {shield_mode})")
     print(f"    Senior:   {BASE_URL}/senior.html")
     print(f"    Guardian: {BASE_URL}/guardian.html\n", flush=True)
     yield
@@ -48,20 +50,46 @@ async def lifespan(_: FastAPI):
 app = FastAPI(title="guardrail", lifespan=lifespan)
 
 
-def process_payment(data: PaymentCreate, created_at: datetime | None = None) -> Payment:
-    """The pipeline: hold funds -> Shield scores -> guardrails -> send or wait for guardian."""
+def process_payment(data: PaymentCreate, created_at: datetime | None = None,
+                    mock: bool | None = None) -> Payment:
+    """Create the PayPal order. Mock orders go straight on to hold_and_check(); sandbox
+    orders wait as awaiting_payer until the payer approves them on PayPal (/api/paypal/return)."""
     payment = Payment(
         id=uuid.uuid4().hex[:12],
         recipient_is_new=store.is_new_recipient(data.recipient_name),
         created_at=created_at or utcnow(),
         **data.model_dump(),
     )
-    first_seen = store.first_seen(payment.recipient_name, payment.created_at)
-    store.save(payment)  # status: pending_review
+    payment.paypal.mock = not paypal.SANDBOX if mock is None else mock
 
-    order = paypal.create_order(payment.amount, payment.currency, payment.recipient_name)
+    try:
+        order = paypal.create_order(
+            payment.amount, payment.currency, payment.recipient_name, mock=payment.paypal.mock,
+            request_id=payment.id,
+            return_url=f"{BASE_URL}/api/paypal/return?payment_id={payment.id}",
+            cancel_url=f"{BASE_URL}/api/paypal/cancel?payment_id={payment.id}",
+        )
+    except paypal.PayPalError as err:
+        log.error("PayPal create_order failed: %s", err)
+        raise HTTPException(502, f"PayPal could not create the order: {err}")
     payment.paypal.order_id = order["id"]
-    payment.paypal.authorization_id = paypal.authorize_order(order["id"])["authorization_id"]
+    store.save(payment)
+
+    if order["approve_url"]:
+        payment.paypal.approve_url = order["approve_url"]
+        payment.status = "awaiting_payer"
+        store.audit("paypal", "order_created", payment.id, f"{order['id']} waiting for payer approval")
+        return payment
+    return hold_and_check(payment)
+
+
+def hold_and_check(payment: Payment) -> Payment:
+    """The pipeline: hold funds -> Shield scores -> guardrails -> send or wait for guardian."""
+    payment.status = "pending_review"
+    payment.paypal.approve_url = None
+    first_seen = store.first_seen(payment.recipient_name, payment.created_at)
+    payment.paypal.authorization_id = paypal.authorize_order(
+        payment.paypal.order_id, mock=payment.paypal.mock)["authorization_id"]
 
     try:
         ai_verdict = shield.score(payment, store.usual_amount(payment.sender))
@@ -77,12 +105,17 @@ def process_payment(data: PaymentCreate, created_at: datetime | None = None) -> 
                 "; ".join(rule_hits) or "no family rule triggered")
 
     if payment.risk.verdict == "allow":
-        payment.paypal.capture_id = paypal.capture_authorization(payment.paypal.authorization_id)["capture_id"]
-        payment.status = "approved"
-    else:
-        payment.status = "held_for_guardian"
-        log.info("Guardian notified: %s -> %s $%.2f (%s)", payment.sender,
-                 payment.recipient_name, payment.amount, payment.risk.verdict)
+        try:
+            payment.paypal.capture_id = paypal.capture_authorization(
+                payment.paypal.authorization_id, mock=payment.paypal.mock)["capture_id"]
+            payment.status = "approved"
+            return payment
+        except paypal.PayPalError as err:
+            # Funds are still held, so the guardian can retry the capture with Approve.
+            store.audit("paypal", "capture_failed", payment.id, str(err))
+    payment.status = "held_for_guardian"
+    log.info("Guardian notified: %s -> %s $%.2f (%s)", payment.sender,
+             payment.recipient_name, payment.amount, payment.risk.verdict)
     return payment
 
 
@@ -117,7 +150,12 @@ def get_payment(payment_id: str):
 def approve_payment(payment_id: str):
     payment = _get_or_404(payment_id)
     _require_held(payment)
-    payment.paypal.capture_id = paypal.capture_authorization(payment.paypal.authorization_id)["capture_id"]
+    try:
+        payment.paypal.capture_id = paypal.capture_authorization(
+            payment.paypal.authorization_id, mock=payment.paypal.mock)["capture_id"]
+    except paypal.PayPalError as err:
+        store.audit("paypal", "capture_failed", payment.id, str(err))
+        raise HTTPException(502, f"PayPal capture failed: {err}")
     payment.status = "approved"
     store.audit("guardian", "approved", payment.id, f"captured {payment.paypal.capture_id}")
     return payment
@@ -127,10 +165,42 @@ def approve_payment(payment_id: str):
 def cancel_payment(payment_id: str):
     payment = _get_or_404(payment_id)
     _require_held(payment)
-    paypal.void_authorization(payment.paypal.authorization_id)
+    try:
+        paypal.void_authorization(payment.paypal.authorization_id, mock=payment.paypal.mock)
+    except paypal.PayPalError as err:
+        store.audit("paypal", "void_failed", payment.id, str(err))
+        raise HTTPException(502, f"PayPal void failed: {err}")
     payment.status = "cancelled"
     store.audit("guardian", "cancelled", payment.id, f"voided {payment.paypal.authorization_id}")
     return payment
+
+
+@app.get("/api/paypal/return", include_in_schema=False)
+def paypal_return(payment_id: str, token: str = ""):
+    """PayPal sends the payer here after they approve the order (token = the order id)."""
+    payment = _get_or_404(payment_id)
+    if payment.status == "awaiting_payer":  # a page refresh must not authorize twice
+        if token and token != payment.paypal.order_id:
+            raise HTTPException(400, "PayPal token does not match this payment's order")
+        store.audit("paypal", "payer_approved", payment.id, payment.paypal.order_id)
+        try:
+            hold_and_check(payment)
+        except paypal.PayPalError as err:
+            log.error("PayPal authorize failed: %s", err)
+            payment.status = "cancelled"
+            store.audit("paypal", "authorize_failed", payment.id, str(err))
+    return RedirectResponse(f"/senior.html?payment={payment.id}", status_code=303)
+
+
+@app.get("/api/paypal/cancel", include_in_schema=False)
+def paypal_cancel(payment_id: str):
+    """The payer clicked cancel on PayPal. Nothing was authorized, so there is nothing to void."""
+    payment = _get_or_404(payment_id)
+    if payment.status == "awaiting_payer":
+        payment.status = "cancelled"
+        payment.paypal.approve_url = None
+        store.audit("paypal", "payer_cancelled", payment.id, payment.paypal.order_id)
+    return RedirectResponse(f"/senior.html?payment={payment.id}", status_code=303)
 
 
 @app.get("/api/rules", response_model=GuardianRules)
@@ -145,9 +215,10 @@ def get_audit():
 
 @app.post("/api/seed", response_model=list[Payment])
 def seed():
-    """Reset the store and load the three demo scenarios."""
+    """Reset the store and load the three demo scenarios. Always mock PayPal: no payer
+    is there to approve sandbox orders."""
     store.reset()
-    return [process_payment(data, at() if at else None) for data, at in SEED_SCENARIOS]
+    return [process_payment(data, at() if at else None, mock=True) for data, at in SEED_SCENARIOS]
 
 
 @app.get("/", include_in_schema=False)

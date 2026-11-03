@@ -125,5 +125,47 @@
       "signals": [],
       "reason": "This payment looks normal and is for a common reason."
     }
+  },
+  "b89f499991d7bab0": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T10:36:20+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "School Cafe",
+      "recipient_is_new": false,
+      "amount": 5.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Lunch"
+    },
+    "result": {
+      "risk_level": "low",
+      "signals": [],
+      "reason": "This payment seems normal and does not show signs of a scam."
+    }
+  },
+  "356db367aae972a6": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T10:36:36+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Mike Turner before.",
+        "This payment is much larger than your usual payments.",
+        "The note asks for urgent bail money for your grandson. This is a common scam."
+      ],
+      "reason": "This payment has several strong signs of being a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent bail money for a relative."
+    }
   }
 }

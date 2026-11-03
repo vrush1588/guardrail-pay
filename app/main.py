@@ -1,3 +1,4 @@
+import asyncio
 import logging
 import uuid
 from contextlib import asynccontextmanager
@@ -11,8 +12,8 @@ from fastapi.staticfiles import StaticFiles
 from app import store
 from app.config import BASE_URL, GEMINI_MODEL, PAYPAL_BASE
 from app.guardrails import RULE_PREFIX, apply_guardrails
-from app.models import AuditEntry, GuardianRules, Payment, PaymentCreate, utcnow
-from app.services import paypal, shield
+from app.models import AuditEntry, CallScript, GuardianRules, Payment, PaymentCreate, utcnow
+from app.services import alerts, paypal, shield
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s  %(name)s  %(message)s")
 log = logging.getLogger("guardrail")
@@ -41,17 +42,56 @@ async def lifespan(_: FastAPI):
     paypal.check_config()
     shield_mode = f"Gemini {GEMINI_MODEL}" if shield.USE_GEMINI else "mock (no GEMINI_API_KEY)"
     paypal_mode = f"sandbox {PAYPAL_BASE}" if paypal.SANDBOX else "mock"
-    print(f"\n  guardrail is running (PayPal: {paypal_mode}, Shield: {shield_mode})")
+    alerts_mode = "Zapier" if alerts.ENABLED else "log only"
+    print(f"\n  guardrail is running (PayPal: {paypal_mode}, Shield: {shield_mode}, Alerts: {alerts_mode})")
     print(f"    Senior:   {BASE_URL}/senior.html")
     print(f"    Guardian: {BASE_URL}/guardian.html\n", flush=True)
+    expiry = asyncio.create_task(_expiry_loop())
     yield
+    expiry.cancel()
+
+
+EXPIRY_CHECK_SECONDS = 30
+
+
+async def _expiry_loop() -> None:
+    while True:
+        await asyncio.sleep(EXPIRY_CHECK_SECONDS)
+        try:
+            await asyncio.to_thread(expire_stale_holds)
+        except Exception:
+            log.exception("hold expiry check failed")
+
+
+def expire_stale_holds(now: datetime | None = None) -> list[Payment]:
+    """Void holds the guardian has not answered within hold_expiry_minutes, so money is
+    never left reserved indefinitely. Unanswered means no: nothing is sent."""
+    now = now or utcnow()
+    minutes = store.guardian_rules.hold_expiry_minutes
+    expired = []
+    for payment in store.list_all():
+        if payment.status != "held_for_guardian" or payment.held_at is None:
+            continue
+        if now - payment.held_at < timedelta(minutes=minutes):
+            continue
+        try:
+            paypal.void_authorization(payment.paypal.authorization_id, mock=payment.paypal.mock)
+        except paypal.PayPalError as err:
+            log.warning("Could not void expired hold %s, will retry: %s", payment.id, err)
+            continue
+        payment.status = "cancelled"
+        store.audit("rules", "expired", payment.id,
+                    f"no guardian answer in {minutes} min; voided {payment.paypal.authorization_id}")
+        alerts.notify_guardian(payment, "hold_expired")
+        expired.append(payment)
+    return expired
 
 
 app = FastAPI(title="guardrail", lifespan=lifespan)
 
 
 def process_payment(data: PaymentCreate, created_at: datetime | None = None,
-                    mock: bool | None = None) -> Payment:
+                    mock: bool | None = None, alert: bool = True) -> Payment:
     """Create the PayPal order. Mock orders go straight on to hold_and_check(); sandbox
     orders wait as awaiting_payer until the payer approves them on PayPal (/api/paypal/return)."""
     payment = Payment(
@@ -80,10 +120,10 @@ def process_payment(data: PaymentCreate, created_at: datetime | None = None,
         payment.status = "awaiting_payer"
         store.audit("paypal", "order_created", payment.id, f"{order['id']} waiting for payer approval")
         return payment
-    return hold_and_check(payment)
+    return hold_and_check(payment, alert)
 
 
-def hold_and_check(payment: Payment) -> Payment:
+def hold_and_check(payment: Payment, alert: bool = True) -> Payment:
     """The pipeline: hold funds -> Shield scores -> guardrails -> send or wait for guardian."""
     payment.status = "pending_review"
     payment.paypal.approve_url = None
@@ -114,8 +154,11 @@ def hold_and_check(payment: Payment) -> Payment:
             # Funds are still held, so the guardian can retry the capture with Approve.
             store.audit("paypal", "capture_failed", payment.id, str(err))
     payment.status = "held_for_guardian"
-    log.info("Guardian notified: %s -> %s $%.2f (%s)", payment.sender,
+    payment.held_at = utcnow()
+    log.info("Held for guardian: %s -> %s $%.2f (%s)", payment.sender,
              payment.recipient_name, payment.amount, payment.risk.verdict)
+    if alert:
+        alerts.notify_guardian(payment, "payment_held")
     return payment
 
 
@@ -175,6 +218,37 @@ def cancel_payment(payment_id: str):
     return payment
 
 
+@app.post("/api/payments/{payment_id}/refund", response_model=Payment)
+def refund_payment(payment_id: str):
+    """The guardian finds out later that a sent payment was a scam: refund it in full."""
+    payment = _get_or_404(payment_id)
+    if payment.status != "approved" or not payment.paypal.capture_id:
+        raise HTTPException(409, f"Payment is {payment.status}; only sent payments can be refunded")
+    try:
+        payment.paypal.refund_id = paypal.refund_capture(
+            payment.paypal.capture_id, mock=payment.paypal.mock)["refund_id"]
+    except paypal.PayPalError as err:
+        store.audit("paypal", "refund_failed", payment.id, str(err))
+        raise HTTPException(502, f"PayPal refund failed: {err}")
+    payment.status = "refunded"
+    store.audit("guardian", "refunded", payment.id, f"refunded {payment.paypal.refund_id}")
+    return payment
+
+
+@app.post("/api/payments/{payment_id}/call-script", response_model=CallScript)
+def get_call_script(payment_id: str):
+    """Shield writes what the guardian can ask when they phone the sender. Made once, then kept."""
+    payment = _get_or_404(payment_id)
+    if payment.call_script is None:
+        _require_held(payment)
+        try:
+            payment.call_script = shield.call_script(payment, store.usual_amount(payment.sender))
+        except shield.ShieldError as err:
+            raise HTTPException(503, f"Shield could not write a call script right now: {err}")
+        store.audit("shield", "call_script", payment.id, payment.call_script.opening)
+    return payment.call_script
+
+
 @app.get("/api/paypal/return", include_in_schema=False)
 def paypal_return(payment_id: str, token: str = ""):
     """PayPal sends the payer here after they approve the order (token = the order id)."""
@@ -216,9 +290,10 @@ def get_audit():
 @app.post("/api/seed", response_model=list[Payment])
 def seed():
     """Reset the store and load the three demo scenarios. Always mock PayPal: no payer
-    is there to approve sandbox orders."""
+    is there to approve sandbox orders. No guardian alerts for demo data."""
     store.reset()
-    return [process_payment(data, at() if at else None, mock=True) for data, at in SEED_SCENARIOS]
+    return [process_payment(data, at() if at else None, mock=True, alert=False)
+            for data, at in SEED_SCENARIOS]
 
 
 @app.get("/", include_in_schema=False)

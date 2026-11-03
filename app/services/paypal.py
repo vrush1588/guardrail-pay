@@ -1,6 +1,7 @@
 """PayPal seam: create an order with intent=AUTHORIZE, the payer approves it on PayPal,
 authorize it so the funds are held, then either capture (guardian approves / shield
-allows) or void (guardian cancels).
+allows) or void (guardian cancels, or the hold expires). A sent payment can later be
+refunded.
 
 Every function takes mock=True/False. Mock calls return fake ids and skip the payer
 approval step. Real calls go to PAYPAL_BASE (the Sandbox by default) and need
@@ -126,6 +127,18 @@ def capture_authorization(authorization_id: str, *, mock: bool) -> dict:
                     request_id=f"capture-{authorization_id}", json={"final_capture": True})
     log.info("capture_authorization %s -> %s (%s)", authorization_id, capture["id"], capture["status"])
     return {"capture_id": capture["id"], "status": capture["status"]}
+
+
+def refund_capture(capture_id: str, *, mock: bool) -> dict:
+    """Full refund of money already sent (guardian finds out later it was a scam)."""
+    if mock:
+        refund_id = _fake_id("REFUND")
+        log.info("refund_capture %s -> %s (money returned, mock)", capture_id, refund_id)
+        return {"refund_id": refund_id, "status": "COMPLETED"}
+
+    refund = _call(f"/v2/payments/captures/{capture_id}/refund", request_id=f"refund-{capture_id}")
+    log.info("refund_capture %s -> %s (%s)", capture_id, refund["id"], refund["status"])
+    return {"refund_id": refund["id"], "status": refund["status"]}
 
 
 def void_authorization(authorization_id: str, *, mock: bool) -> dict:

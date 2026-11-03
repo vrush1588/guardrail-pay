@@ -158,6 +158,7 @@
       approved:  ['bg-success', '✓', 'Payment sent', (p) => `${money(p)} is on its way to ${p.recipient_name}.`],
       waiting:   ['bg-warning', '…', 'Waiting for your family', (p) => `We are holding ${money(p)} for ${p.recipient_name}. Nothing is sent until your family says yes.`],
       cancelled: ['bg-slate-500', '×', 'Payment cancelled', (p) => `No money was sent to ${p.recipient_name}.`],
+      refunded:  ['bg-slate-500', '↩', 'Payment refunded', (p) => `Your family got the ${money(p)} back from ${p.recipient_name}.`],
     };
 
     function showResult(kind, p) {
@@ -182,7 +183,7 @@
     }
 
     function showPayment(p) {
-      if (p.status === 'approved' || p.status === 'cancelled') {
+      if (p.status in RESULTS) {
         showResult(p.status, p);
       } else {
         showAlert(p);

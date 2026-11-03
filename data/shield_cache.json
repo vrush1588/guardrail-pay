@@ -167,5 +167,195 @@
       ],
       "reason": "This payment has several strong signs of being a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent bail money for a relative."
     }
+  },
+  "136eb416e43311d2": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T10:58:31+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "You have never paid Mike Turner before.",
+          "This payment is much larger than your usual payments.",
+          "The note asks for urgent bail money for your grandson. This is a common scam.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: new recipients need a guardian."
+        ],
+        "reason": "This payment has several strong signs of being a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent bail money for a relative."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800.",
+      "questions": [
+        "Did you talk to your grandson yourself today about needing money?",
+        "Did your grandson tell you to send money to someone named Mike Turner?",
+        "Did someone call you and ask you to send this money, or did you call them?"
+      ],
+      "if_scam": "If this request didn't come directly from your grandson, please do not send the money. It's best to hang up and call your grandson on the phone number you already have for him, just to check in."
+    }
+  },
+  "201577e899a3684d": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T10:58:50+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight, don't tell his parents",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "You have never paid Mike Turner before.",
+          "This payment is much larger than your usual payments.",
+          "The note asks you to hurry.",
+          "The note says your grandson needs bail money.",
+          "The note asks you to keep this a secret from his parents.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: new recipients need a guardian."
+        ],
+        "reason": "This payment has many signs of a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent, secret bail money for a relative."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800 to someone named Mike Turner.",
+      "questions": [
+        "Who is Mike Turner, and how do you know him?",
+        "Did your grandson call you directly about needing money, or did someone else call you for him?",
+        "Have you talked to your grandson yourself today, on the phone number you always use for him?",
+        "Did anyone tell you not to tell his parents about this?",
+        "Did anyone tell you this was urgent or a secret?"
+      ],
+      "if_scam": "If anything about this feels off, please don't send the money. It's best to hang up and then call your grandson directly on the phone number you already have for him to make sure he's okay."
+    }
+  },
+  "d7eace82011f623b": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T10:59:10+00:00",
+    "input": {
+      "sender": "Leo (age 12)",
+      "recipient_name": "GameWorld Store",
+      "recipient_is_new": false,
+      "amount": 60.0,
+      "currency": "USD",
+      "usual_amount": 10.0,
+      "local_hour": "late_night",
+      "note": "Skin pack for my game",
+      "held_because": {
+        "risk_level": "medium",
+        "signals": [
+          "This payment is much larger than what you usually send to GameWorld Store.",
+          "You are sending this money late at night.",
+          "Family rule: payments over $50 need a guardian."
+        ],
+        "reason": "This payment is for a much larger amount than usual and is happening late at night, which can sometimes lead to regrettable purchases."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Leo, I'm calling about a payment you tried to send to GameWorld Store.",
+      "questions": [
+        "What game is this 'skin pack' for, and what exactly does it do?",
+        "This payment is for $60, which is quite a bit more than you usually spend there. Can you tell me why this one is so much?",
+        "Did you see this offer yourself, or did someone tell you about it and encourage you to buy it right away?",
+        "Are you absolutely sure you want to buy this tonight, or would you like to think about it until tomorrow morning?"
+      ],
+      "if_scam": "If you're feeling pressured, or if you're not completely sure about this purchase, it's always best to wait. We can talk about it more tomorrow, or you can always come to me or another trusted adult if something feels off."
+    }
+  },
+  "a56be0edb1dc1357": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T10:59:31+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": false,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "The amount you are sending is much larger than you usually send to Mike.",
+          "The note asks for money urgently.",
+          "The note says your grandson needs bail money, which is a common scam.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: Mike Turner was added less than 30 minutes ago."
+        ],
+        "reason": "This payment looks like a scam because the amount is much higher than usual and the note mentions an urgent request for bail money for your grandson."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800.",
+      "questions": [
+        "Did your grandson call you directly about needing money for bail?",
+        "Did you talk to your grandson yourself today, using the phone number you always use for him?",
+        "Who asked you to send this money to Mike Turner?",
+        "Did someone tell you it was very urgent and needed to be sent tonight?"
+      ],
+      "if_scam": "If any of this doesn't sound quite right, please don't send the money. It's best to call your grandson directly on the number you already have for him to check, and we can help you figure out what to do next."
+    }
+  },
+  "7bf244f679e2e8c6": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T11:45:34+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "joe Turner ",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Joe Turner before.",
+        "This payment is much larger than your usual payments.",
+        "The note asks for urgent bail money for your grandson."
+      ],
+      "reason": "This payment has several strong signs of a scam, including a new recipient, a much larger amount than usual, and an urgent request for bail money for a relative."
+    }
+  },
+  "31e666519d591eb4": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-03T11:55:06+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mike Turner",
+      "recipient_is_new": false,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight for health"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "This payment is much larger than you usually send to Mike.",
+        "The note asks you to send money very quickly.",
+        "The note mentions bail money for your grandson."
+      ],
+      "reason": "This payment is much larger than usual, and the note contains urgent requests for bail money for a relative, which are common signs of a scam."
+    }
   }
 }

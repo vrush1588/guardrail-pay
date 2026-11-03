@@ -26,6 +26,14 @@ pressured, who is the one least able to stop and think.
    "Wait. This payment may be a scam" screen with the reasons, and go to the guardian.
 6. **On the dashboard, the guardian approves (PayPal capture) or cancels (PayPal void).**
    A cancelled payment never leaves the account. The senior's screen updates live.
+7. **"What should I ask?"** Shield writes a short phone script for the guardian: a calm
+   opening, 3–4 questions specific to that payment, and what to do if it is a scam.
+8. **Nothing stays held indefinitely.** If the guardian doesn't answer within the family's
+   time limit (24 hours by default), the hold is voided and nothing is sent.
+9. **Refunds:** if a payment that went through turns out to be a scam, the guardian can
+   refund it from the dashboard.
+10. **The guardian gets an alert** (email, SMS or chat, through **Zapier**) as soon as a
+    payment is held, with Shield's reasons and a link to the dashboard.
 
 Every AI verdict, rule decision, PayPal step and guardian action is written to an
 audit log.
@@ -55,7 +63,8 @@ them or any PayPal ids.
 | **PayPal checkout approval** (the `payer-action` link) | The sender logs in to PayPal and approves the payment, then returns to Guardrail |
 | **Authorize order** (`/v2/checkout/orders/{id}/authorize`) | Puts the hold on the funds. This hold is what makes the guardian step possible |
 | **Capture authorization** (`/v2/payments/authorizations/{id}/capture`) | Sends the money: safe payments right away, risky ones once a guardian approves |
-| **Void authorization** (`/v2/payments/authorizations/{id}/void`) | Releases the hold when a guardian cancels, so nothing is charged |
+| **Void authorization** (`/v2/payments/authorizations/{id}/void`) | Releases the hold when a guardian cancels, or when a hold expires unanswered, so nothing is charged |
+| **Refund capture** (`/v2/payments/captures/{id}/refund`) | Returns a sent payment in full when the guardian finds out later it was a scam |
 
 Every call sends a `PayPal-Request-Id`, so retries are idempotent. PayPal errors,
 including their `debug_id`, are logged in the audit log, and the user sees a clear
@@ -66,7 +75,7 @@ payment goes to the guardian.
 
 | Tool | How we use it |
 |---|---|
-| **Google Gemini 2.5 Flash** via the `google-genai` SDK | **Shield**, the scam-risk scorer in [`app/services/shield.py`](app/services/shield.py) |
+| **Google Gemini 2.5 Flash** via the `google-genai` SDK | **Shield**, the scam-risk scorer in [`app/services/shield.py`](app/services/shield.py), and the guardian's **call script** for held payments |
 
 - **Structured output:** Gemini must return JSON that matches a Pydantic schema
   (`risk_level`, `signals`, `reason`), using `response_mime_type="application/json"`
@@ -75,6 +84,10 @@ payment goes to the guardian.
 - **Plain-language explanations:** the `signals` it writes are shown directly to the
   senior and the guardian, for example "You have never paid Mike before." They are
   short, calm sentences a grandparent can understand.
+- **Call script:** for a held payment, Gemini gets the payment and the reasons it was held,
+  and writes what the guardian can say on the phone (again schema-validated JSON). It is
+  told the recipient may *be* the scammer, so it never suggests contacting them. It
+  points the sender to the real relative, on a number they already had.
 - **Prompt-injection defence:** the payment note may have been written by the scammer,
   so the system prompt tells Shield to treat it only as evidence and never follow
   instructions inside it. Shield also can't approve anything on its own (see above).
@@ -84,6 +97,10 @@ payment goes to the guardian.
   for the same payment, so the demo works during Gemini rate limits or outages. Without
   a `GEMINI_API_KEY`, Shield uses built-in offline heuristics, so the app runs with no
   keys at all.
+
+**Sponsor tool:** **Zapier** delivers guardian alerts. Guardrail posts each held payment
+to a Zapier webhook, and the Zap sends it to the guardian by email, SMS or chat (see
+[Guardian alerts with Zapier](#guardian-alerts-with-zapier)).
 
 **Other tools:** FastAPI, Pydantic, httpx, Tailwind CSS. The UI was designed with Google
 Stitch.
@@ -135,7 +152,23 @@ mock PayPal ids, because no one is there to approve those payments on PayPal.
 If PayPal rejects an order because of the account's country or currency, add a US
 sandbox *Business* account and make it the app's account.
 
-## Demo walkthrough (about 3 minutes)
+### Guardian alerts with Zapier
+
+1. In Zapier, create a Zap with the trigger **Webhooks by Zapier → Catch Hook**, and
+   copy its URL into `.env` as `ZAPIER_HOOK_URL`. Restart the server; startup prints
+   `Alerts: Zapier`.
+2. Send a risky payment from the senior screen (for example Mike Turner $800), so Zapier
+   receives a sample alert to build the next step from.
+3. Add an action such as **Email by Zapier**, **Gmail**, **SMS by Zapier** or **Slack**.
+   Use `headline` as the subject, and `reason`, `signals` and `review_url` in the body.
+
+Each alert is flat JSON. `event` is `payment_held` or `hold_expired`, and the other
+fields are `headline`, `sender`, `recipient`, `amount`, `note`, `risk_level`, `verdict`,
+`reason`, `signals`, `review_url`, `payment_id` and `created_at`. **Load demo data** never
+sends alerts. Without `ZAPIER_HOOK_URL`, alerts are only written to the server log.
+Alerts are sent in the background, so a slow or failing webhook never delays a payment.
+
+## Demo walkthrough (about 4 minutes)
 
 1. **Guardian → Load demo data.** Three payments come in:
    - $800 to "Mike Turner", a new recipient: *"URGENT - your grandson needs bail money
@@ -148,9 +181,14 @@ sandbox *Business* account and make it the app's account.
    scam"* with Shield's reasons, and can Call my family, Cancel, or Send anyway (which
    asks the family).
 4. **Guardian:** the payment appears under *Needs your decision* with Shield's reasons
-   and the family rules it hit → **Cancel**. The funds are voided, nothing is sent, and
-   the senior's screen updates within 2 seconds.
-5. Open http://127.0.0.1:8000/api/audit to see every decision Shield, the rules and the
+   and the family rules it hit. If Zapier is set up, the guardian's alert arrives at the
+   same moment. Click **What should I ask?** to get Shield's phone
+   script for the call.
+5. **Guardian → Cancel.** The funds are voided, nothing is sent, and the senior's screen
+   updates within 2 seconds.
+6. **Guardian → Refund** on the $5 School Cafe payment in *All activity*. The money
+   goes back to the sender (PayPal refund).
+7. Open http://127.0.0.1:8000/api/audit to see every decision Shield, the rules and the
    guardian made.
 
 ## How it fits together
@@ -165,18 +203,21 @@ Senior screen ── POST /api/payments
                    ├─ apply_guardrails             family rules; can only get stricter
                    │
                    ├─ allow ─────────► PayPal capture  → "approved"
-                   └─ hold / block ──► guardian dashboard
-                                         ├─ Approve → PayPal capture
-                                         └─ Cancel  → PayPal void
+                   └─ hold / block ──► guardian dashboard  (+ Zapier alert to the guardian)
+                                         ├─ What should I ask? → Shield call script
+                                         ├─ Approve → PayPal capture  (later: Refund → PayPal refund)
+                                         ├─ Cancel  → PayPal void
+                                         └─ no answer in 24 h → PayPal void
 Every step is written to the audit log.
 ```
 
 | File | What it does |
 |---|---|
-| [`app/main.py`](app/main.py) | FastAPI app: endpoints, the payment pipeline, PayPal return/cancel, serves `frontend/` |
+| [`app/main.py`](app/main.py) | FastAPI app: endpoints, the payment pipeline, PayPal return/cancel, hold expiry, serves `frontend/` |
 | [`app/guardrails.py`](app/guardrails.py) | `apply_guardrails()`, the stricter-only rule |
-| [`app/services/shield.py`](app/services/shield.py) | Shield: Gemini call, schema validation, retry, cache, offline fallback |
-| [`app/services/paypal.py`](app/services/paypal.py) | PayPal: OAuth, Orders v2 (authorize), capture, void; mock mode |
+| [`app/services/shield.py`](app/services/shield.py) | Shield: risk score and call script; Gemini call, schema validation, retry, cache, offline fallback |
+| [`app/services/paypal.py`](app/services/paypal.py) | PayPal: OAuth, Orders v2 (authorize), capture, void, refund; mock mode |
+| [`app/services/alerts.py`](app/services/alerts.py) | Guardian alerts: posts held and expired payments to the Zapier webhook |
 | [`app/store.py`](app/store.py) | In-memory store: payments, audit log, family rules, known payees |
 | [`app/models.py`](app/models.py) | Pydantic models for payments, risk, Shield output, rules, audit entries |
 | [`frontend/`](frontend/) | `senior.html` (phone), `guardian.html` (dashboard): static HTML + Tailwind, no build step |
@@ -190,6 +231,8 @@ Every step is written to the audit log.
 | GET | `/api/payments/{id}` | One payment |
 | POST | `/api/payments/{id}/approve` | Guardian approves → PayPal capture |
 | POST | `/api/payments/{id}/cancel` | Guardian cancels → PayPal void |
+| POST | `/api/payments/{id}/refund` | Guardian refunds a sent payment → PayPal refund |
+| POST | `/api/payments/{id}/call-script` | Shield's phone script for a held payment (made once, then kept) |
 | GET | `/api/paypal/return`, `/api/paypal/cancel` | Where PayPal sends the payer after approving or cancelling |
 | GET | `/api/rules` | The family rules |
 | GET | `/api/audit` | Audit log |
@@ -205,7 +248,8 @@ Every step is written to the audit log.
 | `GEMINI_API_KEY` | | Turns on Gemini; without it Shield uses offline heuristics |
 | `GEMINI_MODEL` | `gemini-2.5-flash` | |
 | `SHIELD_CACHE` | on | `0` always calls Gemini instead of replaying saved answers |
-| `GUARDRAIL_BASE_URL` | `http://127.0.0.1:8000` | Public URL of the app, used for PayPal's return links |
+| `GUARDRAIL_BASE_URL` | `http://127.0.0.1:8000` | Public URL of the app, used for PayPal's return links and the link in alerts |
+| `ZAPIER_HOOK_URL` | | Zapier Catch Hook URL for guardian alerts; empty means alerts are only logged |
 
 ## Limitations and next steps
 
@@ -215,10 +259,9 @@ This is a hackathon prototype:
   of using webhooks.
 - There are no user accounts. The senior and guardian screens are open pages.
 
-Next steps: PayPal **webhooks** with signature verification instead of polling,
-**refunds** for payments a guardian later finds were scams, automatically voiding holds
-the guardian hasn't answered, a settings screen for the family rules, and SMS or push
-alerts to guardians.
+Next steps: PayPal **webhooks** with signature verification instead of polling, a
+settings screen for the family rules, and letting the guardian approve or cancel
+straight from the alert.
 
 ## License
 

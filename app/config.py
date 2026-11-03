@@ -13,3 +13,6 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
 BASE_URL = os.getenv("GUARDRAIL_BASE_URL", "http://127.0.0.1:8000")
+
+# Zapier "Catch Hook" URL; held payments are sent there to alert the guardian.
+ZAPIER_HOOK_URL = os.getenv("ZAPIER_HOOK_URL", "").strip()

@@ -3,7 +3,7 @@ from typing import Literal
 
 from pydantic import BaseModel, Field
 
-Status = Literal["awaiting_payer", "pending_review", "held_for_guardian", "approved", "cancelled"]
+Status = Literal["awaiting_payer", "pending_review", "held_for_guardian", "approved", "cancelled", "refunded"]
 Verdict = Literal["allow", "hold", "block"]
 RiskLevel = Literal["low", "medium", "high"]
 Actor = Literal["paypal", "shield", "rules", "guardian"]
@@ -34,6 +34,14 @@ class PayPalRefs(BaseModel):
     approve_url: str | None = None  # sandbox only: where the payer approves the order
     authorization_id: str | None = None
     capture_id: str | None = None
+    refund_id: str | None = None
+
+
+class CallScript(BaseModel):
+    """What the guardian can say when they phone the sender about a held payment."""
+    opening: str = Field(min_length=1)
+    questions: list[str] = Field(min_length=1)
+    if_scam: str = Field(min_length=1)
 
 
 class GuardianRules(BaseModel):
@@ -41,6 +49,7 @@ class GuardianRules(BaseModel):
     allow_new_recipients: bool = False
     cooling_off_minutes: int = 30
     paused: bool = False
+    hold_expiry_minutes: int = 24 * 60  # unanswered holds are voided after this
 
 
 class AuditEntry(BaseModel):
@@ -70,4 +79,6 @@ class Payment(BaseModel):
     status: Status = "pending_review"
     risk: Risk | None = None
     paypal: PayPalRefs = Field(default_factory=PayPalRefs)
+    call_script: CallScript | None = None
     created_at: datetime = Field(default_factory=utcnow)
+    held_at: datetime | None = None  # when it started waiting for the guardian

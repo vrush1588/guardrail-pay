@@ -357,5 +357,47 @@
       ],
       "reason": "This payment is much larger than usual, and the note contains urgent requests for bail money for a relative, which are common signs of a scam."
     }
+  },
+  "fc86091b0d68c0aa": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T09:57:45+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "joe Turner ",
+      "recipient_is_new": true,
+      "amount": 10.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Test"
+    },
+    "result": {
+      "risk_level": "medium",
+      "signals": [
+        "You have never paid Joe Turner before."
+      ],
+      "reason": "This is the first time you are paying Joe Turner."
+    }
+  },
+  "4604747fe7854297": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T10:08:57+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Mary Smith",
+      "recipient_is_new": true,
+      "amount": 15.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Test Mary"
+    },
+    "result": {
+      "risk_level": "medium",
+      "signals": [
+        "You have never paid Mary Smith before."
+      ],
+      "reason": "This is the first time you are sending money to Mary Smith."
+    }
   }
 }

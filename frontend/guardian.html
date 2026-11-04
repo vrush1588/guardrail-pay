@@ -2,19 +2,35 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Family Guardian – Guardian Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Family Guardian – Guardian</title>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
+    // Tokens from the Stitch export (design_ss/.../family_guardian_mobile_alerts).
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            primary: { DEFAULT: '#1d4ed8', hover: '#1e40af' },
-            ink: '#0f172a', muted: '#64748b', critical: '#e11d48', warning: '#d97706',
-            success: '#059669', canvas: '#f8fafc', wash: '#f1f5f9', hairline: '#e2e8f0', keyline: '#cbd5e1',
+            primary: '#0037b0', 'primary-container': '#1d4ed8', 'on-primary': '#ffffff',
+            secondary: '#565e74', 'secondary-container': '#dae2fd', 'on-secondary-container': '#5c647a',
+            tertiary: '#8e0026', 'tertiary-container': '#ba0035', 'tertiary-fixed-dim': '#ffb3b6',
+            'on-tertiary-fixed-variant': '#920028',
+            error: '#ba1a1a', 'error-container': '#ffdad6', 'on-error-container': '#93000a',
+            surface: '#f8f9ff', 'surface-container-lowest': '#ffffff', 'surface-container-low': '#eff4ff',
+            'surface-container': '#e5eeff', 'surface-container-high': '#dce9ff', 'surface-container-highest': '#d3e4fe',
+            'on-surface': '#0b1c30', 'on-surface-variant': '#434655', 'outline-variant': '#c4c5d7',
+            'inverse-surface': '#213145', 'inverse-on-surface': '#eaf1ff', 'primary-fixed': '#dce1ff',
           },
           fontFamily: { sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'] },
+          fontSize: {
+            'label-sm': ['0.6875rem', { lineHeight: '1rem', letterSpacing: '0.04em', fontWeight: '600' }],
+            'label-md': ['0.8125rem', { lineHeight: '1.125rem', fontWeight: '500' }],
+            'label-lg': ['0.9375rem', { lineHeight: '1.25rem', fontWeight: '500' }],
+            'body-sm': ['0.8125rem', { lineHeight: '1.25rem', fontWeight: '400' }],
+            'body-md': ['0.9375rem', { lineHeight: '1.5rem', fontWeight: '400' }],
+            'headline-sm': ['1.125rem', { lineHeight: '1.625rem', letterSpacing: '-0.01em', fontWeight: '600' }],
+            'headline-md': ['1.375rem', { lineHeight: '1.875rem', letterSpacing: '-0.015em', fontWeight: '600' }],
+          },
         },
       },
     };
@@ -22,104 +38,260 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>body { -webkit-font-smoothing: antialiased; }</style>
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&display=block" rel="stylesheet">
+  <style>
+    body { -webkit-font-smoothing: antialiased; }
+    html { scroll-behavior: smooth; scroll-padding-top: 5rem; }
+    .icon { font-family: 'Material Symbols Outlined'; font-weight: normal; font-style: normal; line-height: 1;
+            display: inline-block; white-space: nowrap; direction: ltr; -webkit-font-feature-settings: 'liga'; }
+    .icon-fill { font-variation-settings: 'FILL' 1; }
+  </style>
 </head>
-<body class="bg-canvas min-h-screen font-sans text-ink">
+<body id="top" class="bg-surface text-on-surface font-sans min-h-screen">
 
-  <header class="bg-white border-b border-hairline">
-    <div class="max-w-[1280px] mx-auto px-4 sm:px-8 h-16 flex items-center justify-between gap-3">
+  <header class="sticky top-0 z-40 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+    <div class="max-w-[1100px] mx-auto h-16 px-4 lg:px-8 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 min-w-0">
-        <div class="w-8 h-8 rounded-lg bg-primary flex items-center justify-center text-white">
-          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
-          </svg>
+        <div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center shrink-0">
+          <span class="icon text-on-primary text-[20px]">verified_user</span>
         </div>
-        <span class="text-lg font-bold tracking-tight whitespace-nowrap">Family Guardian</span>
-        <span class="hidden sm:inline ml-2 text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded bg-wash text-slate-600 border border-hairline">Guardian</span>
+        <div class="min-w-0">
+          <p id="shield-state" class="text-label-sm uppercase tracking-wider text-secondary">Shield active</p>
+          <h1 class="text-headline-sm truncate">Family Guardian</h1>
+        </div>
       </div>
-      <div class="flex items-center gap-3 flex-shrink-0">
-        <a href="/senior.html" target="_blank" class="hidden sm:inline text-sm font-medium text-muted hover:text-ink">Open senior screen ↗</a>
-        <button id="btn-seed" class="h-10 px-3 sm:px-4 whitespace-nowrap bg-white hover:bg-canvas text-sm font-semibold rounded-lg border border-hairline hover:border-keyline">
-          Load demo data
+      <div class="flex items-center gap-1.5 shrink-0">
+        <button type="button" data-pause class="min-h-[40px] px-2.5 rounded-lg bg-error-container text-on-error-container flex items-center gap-1 hover:bg-error hover:text-white transition-colors">
+          <span class="icon text-[18px]" data-pause-icon>pause_circle</span><span class="text-label-sm" data-pause-label>Freeze</span>
+        </button>
+        <button type="button" id="btn-seed" title="Reset and load the demo payments" class="min-h-[40px] px-2.5 rounded-lg bg-surface-container-high hover:bg-surface-container-highest flex items-center gap-1 disabled:opacity-60">
+          <span class="icon text-[18px] text-primary">restart_alt</span><span id="seed-label" class="hidden sm:inline text-label-sm">Demo data</span>
         </button>
       </div>
     </div>
   </header>
 
-  <main class="max-w-[1280px] mx-auto px-4 sm:px-8 py-6 sm:py-8 space-y-6">
+  <main class="max-w-[1100px] mx-auto px-4 lg:px-8 pt-3 pb-28 lg:pb-10">
+    <p id="error" class="hidden mb-3 rounded-lg bg-error-container text-on-error-container px-3 py-2 text-body-sm font-medium"></p>
 
-    <!-- Counts: stacked rows on mobile, tiles from sm up -->
-    <section class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-6">
-      <div class="bg-white border border-hairline rounded-xl px-4 py-3 sm:p-6 flex items-center justify-between sm:block">
-        <p class="text-[11px] font-semibold uppercase tracking-wider text-muted">Checked</p>
-        <p id="count-checked" class="sm:mt-1 text-2xl sm:text-[32px] font-semibold tracking-tight">0</p>
-      </div>
-      <div class="bg-white border border-hairline rounded-xl px-4 py-3 sm:p-6 flex items-center justify-between sm:block">
-        <p class="text-[11px] font-semibold uppercase tracking-wider text-warning">Held</p>
-        <p id="count-held" class="sm:mt-1 text-2xl sm:text-[32px] font-semibold tracking-tight">0</p>
-      </div>
-      <div class="bg-white border border-hairline rounded-xl px-4 py-3 sm:p-6 flex items-center justify-between sm:block">
-        <p class="text-[11px] font-semibold uppercase tracking-wider text-critical">Blocked</p>
-        <p id="count-blocked" class="sm:mt-1 text-2xl sm:text-[32px] font-semibold tracking-tight">0</p>
-      </div>
-    </section>
+    <!-- grid-cols-1 = minmax(0, 1fr): without it, long no-wrap rows widen the column past small phones -->
+    <div class="grid grid-cols-1 gap-4 lg:gap-6 lg:grid-cols-[minmax(0,1fr)_380px] items-start">
 
-    <p id="rules" class="text-sm text-muted"></p>
-    <p id="error" class="hidden text-sm font-medium text-critical"></p>
+      <!-- Left: what needs the guardian now -->
+      <div class="space-y-4 min-w-0">
+        <section class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-2">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-1.5">
+              <span class="relative flex h-2.5 w-2.5">
+                <span id="live-ping" class="animate-ping absolute inline-flex h-full w-full rounded-full bg-primary opacity-75"></span>
+                <span id="live-dot" class="relative inline-flex rounded-full h-2.5 w-2.5 bg-primary"></span>
+              </span>
+              <span id="live-label" class="text-label-sm text-secondary uppercase tracking-wider">Real-time active guardrail</span>
+            </div>
+            <span id="pending-pill" class="hidden items-center gap-1.5 bg-tertiary-container/10 px-2.5 py-1 rounded-full">
+              <span class="w-1.5 h-1.5 rounded-full bg-tertiary"></span>
+              <span id="pending-count" class="text-label-sm text-tertiary font-semibold"></span>
+            </span>
+          </div>
+          <div class="flex items-center justify-between gap-3 pt-1">
+            <div class="min-w-0">
+              <h2 class="text-headline-sm">Needs your decision</h2>
+              <p id="held-summary" class="text-body-sm text-on-surface-variant"></p>
+            </div>
+            <button type="button" data-pause class="min-h-[44px] px-3.5 bg-surface-container-high hover:bg-error-container rounded-lg flex items-center gap-1.5 shadow-sm active:scale-95 transition-all shrink-0">
+              <span class="icon text-error text-[18px]" data-pause-icon>pause_circle</span>
+              <span class="text-label-md font-semibold" data-pause-label>Pause all</span>
+            </button>
+          </div>
+        </section>
 
-    <!-- Needs your decision -->
-    <section>
-      <h2 class="text-lg font-semibold tracking-tight mb-3">Needs your decision</h2>
-      <div id="held-list" class="space-y-4"></div>
-      <p id="held-empty" class="bg-white border border-hairline rounded-xl p-4 sm:p-6 text-muted">
-        Nothing is waiting for you. Click “Load demo data” or send a payment from the senior screen.
-      </p>
-    </section>
-
-    <!-- All activity -->
-    <!-- From and Time columns hide on mobile; the To cell shows the sender underneath instead -->
-    <section class="bg-white border border-hairline rounded-xl overflow-hidden">
-      <h2 class="text-lg font-semibold tracking-tight px-4 sm:px-6 pt-5 pb-3">All activity</h2>
-      <div class="overflow-x-auto">
-        <table class="w-full text-sm">
-          <thead class="text-left text-[11px] font-semibold uppercase tracking-wider text-muted border-y border-hairline bg-canvas">
-            <tr>
-              <th class="hidden sm:table-cell px-6 py-2.5">From</th><th class="px-4 sm:px-6 py-2.5">To</th>
-              <th class="px-3 sm:px-6 py-2.5 text-right">Amount</th><th class="px-3 sm:px-6 py-2.5">Shield</th>
-              <th class="px-4 sm:px-6 py-2.5">Status</th><th class="hidden sm:table-cell px-6 py-2.5">Time</th>
-            </tr>
-          </thead>
-          <tbody id="activity" class="divide-y divide-wash"></tbody>
-        </table>
+        <div id="held-list" class="space-y-4"></div>
+        <section id="held-empty" class="bg-surface-container-lowest shadow-sm rounded-xl p-6 text-center">
+          <span class="icon icon-fill text-[36px] text-primary">task_alt</span>
+          <p class="mt-2 text-headline-sm">All clear</p>
+          <p class="text-body-sm text-on-surface-variant">Nothing is waiting for you. Tap <span class="font-semibold">Demo data</span> or send a payment from Grandma's phone.</p>
+        </section>
       </div>
-    </section>
+
+      <!-- Right: overview -->
+      <div class="space-y-4 min-w-0">
+        <section class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="text-label-sm uppercase tracking-wider text-secondary">Shield telemetry</span>
+            <span id="synced" class="text-label-sm text-primary font-medium">Connecting…</span>
+          </div>
+          <div class="grid grid-cols-3 gap-2">
+            <div class="bg-surface-container-low rounded-lg p-2.5 flex flex-col items-center text-center">
+              <span class="w-7 h-7 rounded-full bg-surface-container-high text-primary flex items-center justify-center mb-1"><span class="icon text-[16px]">verified</span></span>
+              <span id="count-checked" class="text-headline-sm font-bold">0</span>
+              <span class="text-label-sm text-on-surface-variant">Inspected</span>
+            </div>
+            <div class="bg-surface-container-low rounded-lg p-2.5 flex flex-col items-center text-center">
+              <span class="w-7 h-7 rounded-full bg-secondary-container text-secondary flex items-center justify-center mb-1"><span class="icon text-[16px]">pause</span></span>
+              <span id="count-held" class="text-headline-sm font-bold">0</span>
+              <span class="text-label-sm text-on-surface-variant">Held review</span>
+            </div>
+            <div class="bg-surface-container-low rounded-lg p-2.5 flex flex-col items-center text-center">
+              <span class="w-7 h-7 rounded-full bg-tertiary-container/15 text-tertiary flex items-center justify-center mb-1"><span class="icon text-[16px]">security</span></span>
+              <span id="count-saved" class="text-headline-sm font-bold text-tertiary">$0</span>
+              <span class="text-label-sm text-on-surface-variant">Prevented</span>
+            </div>
+          </div>
+        </section>
+
+        <section id="family" class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-headline-sm">Family</h2>
+            <span class="text-label-sm text-secondary">2 protected</span>
+          </div>
+          <div id="members" class="space-y-1.5"></div>
+        </section>
+
+        <section id="rules" class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-headline-sm">Family rules</h2>
+            <span class="text-label-sm text-secondary">Final say</span>
+          </div>
+          <ul id="rules-list" class="space-y-1.5"></ul>
+          <p class="flex items-start gap-2 text-body-sm text-on-surface-variant">
+            <span class="icon text-[18px] text-primary">shield</span>
+            Rules can only make Shield stricter, never looser. If Shield fails, the payment is held.
+          </p>
+        </section>
+
+        <section id="payments" class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-headline-sm">All payments</h2>
+            <span class="text-label-sm text-secondary">PayPal</span>
+          </div>
+          <ul id="payment-list" class="divide-y divide-surface-container"></ul>
+          <p id="payments-empty" class="text-body-sm text-on-surface-variant">No payments yet.</p>
+        </section>
+
+        <section id="activity" class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-3">
+          <div class="flex items-center justify-between">
+            <h2 class="text-headline-sm">Activity log</h2>
+            <span class="text-label-sm text-secondary">Audit trail</span>
+          </div>
+          <ol id="audit-list" class="relative pl-6 space-y-3.5 before:content-[''] before:absolute before:left-[5px] before:top-2 before:bottom-2 before:w-[2px] before:bg-surface-container-highest"></ol>
+          <p id="audit-empty" class="text-body-sm text-on-surface-variant">Every Shield verdict, rule decision and guardian action shows up here.</p>
+        </section>
+
+        <p class="text-center text-label-md text-on-surface-variant">
+          <a href="/phone.html" target="_blank" class="text-primary font-semibold hover:underline">Grandma's phone ↗</a> ·
+          <a href="/senior.html" target="_blank" class="text-primary font-semibold hover:underline">Senior app ↗</a>
+        </p>
+      </div>
+    </div>
   </main>
 
+  <!-- Bottom tabs (mobile only): jump to sections -->
+  <nav class="lg:hidden fixed bottom-0 inset-x-0 z-40 bg-surface/90 backdrop-blur-xl shadow-[0_-1px_8px_rgba(0,0,0,0.04)] pb-[env(safe-area-inset-bottom)]">
+    <div class="flex justify-around items-center h-16">
+      <a href="#top" data-tab class="relative flex flex-col items-center w-16 text-primary font-semibold">
+        <span class="relative"><span class="icon text-[24px]">shield</span><span id="tab-dot" class="hidden absolute -top-0.5 -right-1 w-2.5 h-2.5 rounded-full bg-error ring-2 ring-surface"></span></span>
+        <span class="text-label-sm mt-0.5">Alerts</span>
+      </a>
+      <a href="#family" data-tab class="flex flex-col items-center w-16 text-on-surface-variant">
+        <span class="icon text-[24px]">group</span><span class="text-label-sm mt-0.5">Family</span>
+      </a>
+      <a href="#activity" data-tab class="flex flex-col items-center w-16 text-on-surface-variant">
+        <span class="icon text-[24px]">receipt_long</span><span class="text-label-sm mt-0.5">Activity</span>
+      </a>
+      <a href="#rules" data-tab class="flex flex-col items-center w-16 text-on-surface-variant">
+        <span class="icon text-[24px]">tune</span><span class="text-label-sm mt-0.5">Rules</span>
+      </a>
+    </div>
+  </nav>
+
+  <!-- Toast -->
+  <div id="toast" class="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-8 lg:w-[380px] z-50 bg-inverse-surface text-inverse-on-surface px-3 py-2.5 rounded-xl shadow-lg flex items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-300">
+    <span class="icon text-primary-fixed text-[20px]">check_circle</span>
+    <span id="toast-msg" class="text-body-sm flex-1"></span>
+  </div>
+
+  <!-- Override confirmation (approving a payment Shield blocked) -->
+  <div id="override" class="hidden fixed inset-0 z-50 bg-on-surface/40 backdrop-blur-sm flex items-end sm:items-center justify-center p-4">
+    <div class="bg-surface-container-lowest w-full max-w-sm rounded-xl p-4 shadow-xl space-y-3">
+      <div class="flex items-center gap-2 text-tertiary">
+        <span class="icon text-[24px]">gpp_maybe</span>
+        <h3 class="text-headline-sm text-on-surface">Override Shield?</h3>
+      </div>
+      <p id="override-text" class="text-body-md text-on-surface-variant"></p>
+      <div class="grid grid-cols-2 gap-2 pt-1">
+        <button type="button" id="override-no" class="min-h-[44px] bg-surface-container rounded-lg text-label-md font-semibold">Go back</button>
+        <button type="button" id="override-yes" class="min-h-[44px] bg-tertiary text-white rounded-lg text-label-md font-semibold">Yes, send it</button>
+      </div>
+    </div>
+  </div>
+
   <template id="held-card">
-    <article class="bg-white border border-hairline rounded-xl p-4 sm:p-6 flex flex-col sm:flex-row gap-4 sm:gap-6 sm:items-start">
-      <div class="flex-1 min-w-0">
-        <div class="flex items-center gap-2 mb-1">
-          <span data-f="chip" class="text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded border"></span>
-          <span data-f="score" class="text-xs text-muted"></span>
+    <article class="bg-surface-container-lowest shadow-sm rounded-xl p-4 space-y-3">
+      <div class="flex items-start justify-between gap-2">
+        <div class="flex items-center gap-3 min-w-0">
+          <div data-f="avatar" class="w-11 h-11 rounded-xl flex items-center justify-center text-headline-sm font-bold shrink-0"></div>
+          <div class="min-w-0">
+            <h3 data-f="sender" class="text-headline-sm truncate"></h3>
+            <p data-f="meta" class="text-label-sm text-on-surface-variant truncate"></p>
+          </div>
         </div>
-        <p class="text-xl sm:text-[22px] font-semibold tracking-tight break-words">
-          <span data-f="amount"></span> <span class="text-muted font-normal">to</span> <span data-f="recipient"></span>
-        </p>
-        <p class="text-sm text-muted mt-0.5"><span data-f="sender"></span> · <span data-f="new"></span> · <span data-f="time"></span></p>
-        <p data-f="note" class="mt-3 text-sm italic text-slate-600"></p>
-        <p data-f="reason" class="mt-3 text-sm font-medium"></p>
-        <ul data-f="signals" class="mt-3 space-y-1 text-sm text-slate-700 list-disc pl-5"></ul>
-        <div data-f="script" class="hidden mt-4 rounded-lg border border-hairline bg-canvas p-4 text-sm">
-          <p class="text-[11px] font-semibold uppercase tracking-wider text-primary mb-2">Before you decide, call them</p>
-          <p data-f="opening" class="italic text-slate-700"></p>
-          <ol data-f="questions" class="mt-2 space-y-1 list-decimal pl-5"></ol>
-          <p data-f="if-scam" class="mt-3 font-medium"></p>
+        <span data-f="badge" class="px-2 py-1 rounded-md flex items-center gap-1 shrink-0">
+          <span data-f="badge-icon" class="icon icon-fill text-[15px]"></span>
+          <span data-f="badge-text" class="text-label-sm font-bold uppercase"></span>
+        </span>
+      </div>
+
+      <div class="bg-surface-container-low rounded-lg p-3 flex items-center justify-between gap-2">
+        <div class="min-w-0">
+          <p class="text-label-sm text-secondary uppercase">Held by PayPal · not sent</p>
+          <p data-f="amount" class="text-headline-md font-bold"></p>
+          <p data-f="to" class="text-body-sm text-on-surface-variant"></p>
+        </div>
+        <span class="w-10 h-10 rounded-lg bg-surface-container-highest flex items-center justify-center shrink-0"><span class="icon text-[20px]">send_money</span></span>
+      </div>
+      <p data-f="note" class="text-body-sm italic text-on-surface-variant px-1"></p>
+
+      <div data-f="ai" class="rounded-lg p-3 flex items-start gap-2.5">
+        <span data-f="ai-icon" class="p-1 rounded-md text-white shrink-0 mt-0.5"><span class="icon text-[16px] block">smart_toy</span></span>
+        <div class="min-w-0">
+          <p data-f="ai-title" class="text-label-sm font-bold uppercase"></p>
+          <p data-f="reason" class="text-body-sm mt-0.5"></p>
+          <details data-f="ai-details" class="mt-1.5 group">
+            <summary class="cursor-pointer list-none text-label-md font-semibold flex items-center gap-0.5">
+              <span data-f="ai-count"></span><span class="icon text-[18px] transition-transform group-open:rotate-180">expand_more</span>
+            </summary>
+            <ul data-f="ai-signals" class="mt-1 space-y-1 text-body-sm text-on-surface-variant"></ul>
+          </details>
         </div>
       </div>
-      <div class="grid grid-cols-2 sm:flex sm:flex-col gap-2 sm:w-36 flex-shrink-0">
-        <button data-act="approve" class="h-11 sm:h-10 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-lg disabled:opacity-60">Approve</button>
-        <button data-act="cancel" class="h-11 sm:h-10 bg-white hover:bg-canvas text-sm font-semibold rounded-lg border border-hairline hover:border-keyline disabled:opacity-60">Cancel</button>
-        <button data-act="call-script" class="col-span-2 h-11 sm:h-10 px-2 text-sm font-semibold text-primary hover:bg-wash rounded-lg disabled:opacity-60">What should I ask?</button>
+
+      <div data-f="rules" class="bg-surface-container rounded-lg p-3 flex items-start gap-2.5">
+        <span class="p-1 rounded-md bg-secondary text-white shrink-0 mt-0.5"><span class="icon text-[16px] block">gavel</span></span>
+        <div class="min-w-0">
+          <p class="text-label-sm font-semibold uppercase">Family rule triggered</p>
+          <ul data-f="rule-signals" class="mt-0.5 space-y-0.5 text-body-sm text-on-surface-variant"></ul>
+        </div>
+      </div>
+
+      <div data-f="script" class="hidden rounded-lg border border-primary/20 bg-primary-fixed/40 p-3">
+        <p data-f="script-title" class="text-label-sm font-bold uppercase text-primary mb-1.5"></p>
+        <p data-f="opening" class="text-body-sm italic"></p>
+        <ol data-f="questions" class="mt-2 space-y-1 list-decimal pl-5 text-body-sm"></ol>
+        <p data-f="if-scam" class="mt-2 text-body-sm font-semibold"></p>
+      </div>
+
+      <div class="space-y-2 pt-1">
+        <button type="button" data-act="call-script" class="w-full min-h-[48px] bg-primary hover:bg-primary-container text-white rounded-lg flex items-center justify-center gap-2 text-label-lg font-semibold shadow-sm active:scale-[0.99] transition disabled:opacity-60">
+          <span class="icon text-[20px]">phone_in_talk</span><span data-label></span>
+        </button>
+        <div class="grid grid-cols-2 gap-2">
+          <button type="button" data-act="cancel" class="min-h-[44px] bg-tertiary-container/15 hover:bg-tertiary-container/25 text-tertiary rounded-lg text-label-md font-semibold flex items-center justify-center gap-1 active:scale-95 transition disabled:opacity-60">
+            <span class="icon text-[18px]">cancel</span><span data-label>Cancel payment</span>
+          </button>
+          <button type="button" data-act="approve" class="min-h-[44px] rounded-lg text-label-md font-semibold flex items-center justify-center gap-1 active:scale-95 transition disabled:opacity-60">
+            <span class="icon text-[18px]">check_circle</span><span data-label></span>
+          </button>
+        </div>
       </div>
     </article>
   </template>
@@ -127,121 +299,324 @@
   <script>
     const $ = (id) => document.getElementById(id);
 
-    const VERDICT_CHIP = {
-      allow: 'bg-emerald-100 text-emerald-700 border-emerald-200',
-      hold:  'bg-amber-100 text-amber-700 border-amber-200',
-      block: 'bg-rose-100 text-rose-700 border-rose-200',
+    // Who the guardian looks after. Usual amounts mirror USUAL_AMOUNT in app/store.py.
+    const MEMBERS = [
+      { name: 'Grandma Rose', usual: 40 },
+      { name: 'Leo (age 12)', usual: 10 },
+    ];
+    const STATUS = {
+      awaiting_payer:    ['At PayPal', 'bg-surface-container-high text-secondary'],
+      pending_review:    ['Checking', 'bg-surface-container-high text-secondary'],
+      held_for_guardian: ['Held', 'bg-amber-100 text-amber-800'],
+      approved:          ['Sent', 'bg-emerald-100 text-emerald-800'],
+      cancelled:         ['Cancelled', 'bg-surface-container-high text-on-surface-variant'],
+      refunded:          ['Refunded', 'bg-surface-container-high text-on-surface-variant'],
     };
-    const STATUS_LABEL = {
-      awaiting_payer: 'At PayPal', pending_review: 'Reviewing', held_for_guardian: 'Held', approved: 'Sent', cancelled: 'Cancelled',
-      refunded: 'Refunded',
+    // Audit actions in plain words, and the timeline dot colour per actor.
+    const AUDIT = {
+      order_created: 'Order created at PayPal', payer_approved: 'Payer approved on PayPal',
+      payer_cancelled: 'Payer cancelled on PayPal', scored_low: 'Shield AI: low risk',
+      scored_medium: 'Shield AI: medium risk', scored_high: 'Shield AI: high risk',
+      failed: 'Shield could not check it, so it was held', verdict_allow: 'Sent automatically',
+      verdict_hold: 'Held for you', verdict_block: 'Blocked and held for you',
+      approved: 'You approved it. PayPal sent the money', cancelled: 'You cancelled it. PayPal released the hold',
+      refunded: 'You refunded it through PayPal', call_script: 'Shield wrote your call script',
+      expired: 'No answer in time. Hold released automatically',
+      paused: 'You paused all payments', resumed: 'You resumed payments',
+      capture_failed: 'PayPal could not send it', void_failed: 'PayPal could not release the hold',
+      refund_failed: 'PayPal could not refund it', authorize_failed: 'PayPal could not hold the money',
     };
-    const PENDING_LABEL = { approve: 'Sending…', cancel: 'Cancelling…', 'call-script': 'Writing…', refund: 'Refunding…' };
+    const DOT = { shield: 'bg-tertiary', rules: 'bg-amber-600', guardian: 'bg-primary', paypal: 'bg-secondary' };
+    const PENDING_LABEL = { approve: 'Sending…', cancel: 'Cancelling…', 'call-script': 'Shield is writing…', refund: 'Refunding…' };
+    const DONE_TOAST = {
+      approve: 'Approved. PayPal sent the money.',
+      cancel: 'Cancelled. PayPal released the hold, nothing was sent.',
+      refund: 'Refunded. The money is going back.',
+    };
+    const RULE_PREFIX = 'Family rule:';   // matches RULE_PREFIX in app/guardrails.py
     const pending = new Set();   // "id:action" requests in flight; survives the 3s re-render
+    const openReasons = new Set();   // payment ids whose "Why?" list the guardian opened
+    let rules = null;
+    let lastPayments = [];
 
-    const money = (p) => `$${p.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}`;
-    const time = (p) => new Date(p.created_at).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+    const money = (amount, cents = true) =>
+      `$${amount.toLocaleString(undefined, { minimumFractionDigits: cents ? 2 : 0, maximumFractionDigits: cents ? 2 : 0 })}`;
+    const initials = (name) => name.replace(/\(.*\)/, '').trim().split(/\s+/).map((w) => w[0]).join('').slice(0, 2).toUpperCase();
+    const firstName = (name) => name.replace(/\(.*\)/, '').trim();
+
+    function ago(iso) {
+      const minutes = Math.round((Date.now() - new Date(iso)) / 60000);
+      if (minutes < 1) return 'just now';
+      if (minutes < 60) return `${minutes} min ago`;
+      if (minutes < 12 * 60) return `${Math.round(minutes / 60)} h ago`;
+      return new Date(iso).toLocaleString([], { weekday: 'short', hour: 'numeric', minute: '2-digit' });
+    }
+    const clock = (iso) => new Date(iso).toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
 
     async function api(path, options = {}) {
-      const res = await fetch(path, options);
+      const res = await fetch(path, { headers: { 'Content-Type': 'application/json' }, ...options });
       if (!res.ok) throw new Error((await res.json().catch(() => ({}))).detail || res.statusText);
       return res.json();
     }
 
-    function chip(el, verdict) {
-      el.textContent = verdict;
-      el.className = `text-[11px] font-semibold uppercase tracking-wider px-1.5 py-0.5 rounded border ${VERDICT_CHIP[verdict]}`;
+    function li(text, className = '') {
+      const el = document.createElement('li');
+      el.className = className;
+      el.textContent = text;
+      return el;
     }
 
+    let toastTimer = null;
+    function toast(message) {
+      $('toast-msg').textContent = message;
+      $('toast').classList.remove('opacity-0');
+      clearTimeout(toastTimer);
+      toastTimer = setTimeout(() => $('toast').classList.add('opacity-0'), 3800);
+    }
+
+    function showError(message) {
+      $('error').textContent = message;
+      $('error').classList.toggle('hidden', !message);
+    }
+
+    // ---- held payment cards ----
     function renderHeld(payments) {
       const held = payments.filter((p) => p.status === 'held_for_guardian');
       $('held-empty').classList.toggle('hidden', held.length > 0);
+      $('pending-pill').classList.toggle('hidden', held.length === 0);
+      $('pending-pill').classList.toggle('flex', held.length > 0);
+      $('pending-count').textContent = `${held.length} pending`;
+      $('tab-dot').classList.toggle('hidden', held.length === 0);
+      $('held-summary').textContent = held.length
+        ? `${held.length} held by PayPal for you`
+        : 'Nothing waiting right now';
+
       $('held-list').replaceChildren(...held.map((p) => {
         const card = $('held-card').content.cloneNode(true);
         const f = (name) => card.querySelector(`[data-f="${name}"]`);
-        chip(f('chip'), p.risk.verdict);
-        f('score').textContent = `Shield: ${p.risk.risk_level} risk`;
-        f('amount').textContent = money(p);
-        f('recipient').textContent = p.recipient_name;
-        f('sender').textContent = `From ${p.sender}`;
-        f('new').textContent = p.recipient_is_new ? 'New recipient' : 'Known recipient';
-        f('time').textContent = time(p);
+        const blocked = p.risk.verdict === 'block';
+        const high = p.risk.risk_level === 'high';
+
+        f('avatar').textContent = initials(p.sender);
+        f('avatar').classList.add(...(high ? ['bg-tertiary-container/15', 'text-tertiary'] : ['bg-secondary-container', 'text-on-secondary-container']));
+        f('sender').textContent = p.sender;
+        f('meta').textContent = `${p.paypal.mock ? 'PayPal (demo)' : 'PayPal Sandbox'} · ${ago(p.created_at)}`;
+
+        f('badge').classList.add(...(blocked ? ['bg-error-container', 'text-on-error-container'] : ['bg-surface-container-high', 'text-secondary']));
+        f('badge-icon').textContent = blocked ? 'warning' : 'schedule';
+        f('badge-text').textContent = blocked ? `${p.risk.risk_level} risk` : 'On hold';
+
+        f('amount').textContent = money(p.amount);
+        f('amount').classList.add(high ? 'text-tertiary' : 'text-primary');
+        f('to').textContent = `To ${p.recipient_name}${p.recipient_is_new ? ' (new recipient)' : ''}`;
         f('note').textContent = p.note ? `“${p.note}”` : '';
+
+        // Shield's own findings vs. the family's rules, so the stricter-only design is visible.
+        const ruleSignals = p.risk.signals.filter((s) => s.startsWith(RULE_PREFIX));
+        const aiSignals = p.risk.signals.filter((s) => !s.startsWith(RULE_PREFIX));
+        f('ai').classList.add(high ? 'bg-tertiary-fixed-dim/30' : 'bg-surface-container-low');
+        f('ai-icon').classList.add(high ? 'bg-tertiary' : 'bg-primary-container');
+        f('ai-title').textContent = `Shield AI · ${p.risk.risk_level} risk`;
+        f('ai-title').classList.add(high ? 'text-on-tertiary-fixed-variant' : 'text-primary');
         f('reason').textContent = p.risk.reason;
-        f('signals').replaceChildren(...p.risk.signals.map((r) => {
-          const li = document.createElement('li');
-          li.textContent = r;
-          return li;
-        }));
+        f('ai-signals').replaceChildren(...aiSignals.map((s) => li(`• ${s}`)));
+        if (aiSignals.length) {
+          // Folded by default so a card fits a phone screen; stays open across the 3s re-render.
+          f('ai-count').textContent = `Why? ${aiSignals.length} reason${aiSignals.length > 1 ? 's' : ''}`;
+          f('ai-details').open = openReasons.has(p.id);
+          f('ai-details').addEventListener('toggle', (e) => {
+            if (e.target.open) openReasons.add(p.id); else openReasons.delete(p.id);
+          });
+        } else {
+          f('ai-details').remove();
+        }
+        if (ruleSignals.length) {
+          f('rule-signals').replaceChildren(...ruleSignals.map((s) => {
+            const text = s.slice(RULE_PREFIX.length).trim();
+            return li(text.charAt(0).toUpperCase() + text.slice(1));
+          }));
+        } else {
+          f('rules').remove();
+        }
+
+        const who = firstName(p.sender);
+        const callBtn = card.querySelector('[data-act="call-script"]');
         if (p.call_script) {
           f('script').classList.remove('hidden');
+          f('script-title').textContent = `Call ${who} before you decide`;
           f('opening').textContent = `“${p.call_script.opening}”`;
-          f('questions').replaceChildren(...p.call_script.questions.map((q) => {
-            const li = document.createElement('li');
-            li.textContent = q;
-            return li;
-          }));
+          f('questions').replaceChildren(...p.call_script.questions.map((q) => li(q)));
           f('if-scam').textContent = `If it is a scam: ${p.call_script.if_scam}`;
-          card.querySelector('[data-act="call-script"]').remove();
+          callBtn.remove();
+        } else {
+          callBtn.querySelector('[data-label]').textContent = `Call ${who} first: what to ask`;
         }
-        card.querySelectorAll('[data-act]').forEach((btn) => wireAction(btn, p.id, btn.dataset.act));
+
+        const approve = card.querySelector('[data-act="approve"]');
+        approve.querySelector('[data-label]').textContent = blocked ? 'Override & approve' : 'Approve once';
+        approve.classList.add(...(blocked
+          ? ['bg-surface-container-high', 'hover:bg-surface-container-highest']
+          : ['bg-primary', 'hover:bg-primary-container', 'text-white', 'shadow-sm']));
+
+        card.querySelectorAll('[data-act]').forEach((btn) => wireAction(btn, p, btn.dataset.act));
         return card;
       }));
     }
 
-    function renderActivity(payments) {
-      $('activity').replaceChildren(...payments.map((p) => {
-        const tr = document.createElement('tr');
-        tr.innerHTML = `
-          <td class="hidden sm:table-cell px-6 py-3"></td>
-          <td class="px-4 sm:px-6 py-3"><span class="font-medium"></span><span class="sm:hidden block text-xs text-muted"></span></td>
-          <td class="px-3 sm:px-6 py-3 text-right tabular-nums"></td><td class="px-3 sm:px-6 py-3"><span></span></td>
-          <td class="px-4 sm:px-6 py-3"></td><td class="hidden sm:table-cell px-6 py-3 text-muted"></td>`;
-        const td = tr.children;
-        td[0].textContent = p.sender;
-        td[1].children[0].textContent = p.recipient_name;
-        td[1].children[1].textContent = `${p.sender} · ${time(p)}`;
-        td[2].textContent = money(p);
-        if (p.risk) chip(td[3].firstChild, p.risk.verdict);
-        td[4].textContent = STATUS_LABEL[p.status];
+    // ---- overview cards ----
+    function renderTelemetry(payments) {
+      $('count-checked').textContent = payments.filter((p) => p.risk).length;
+      $('count-held').textContent = payments.filter((p) => p.status === 'held_for_guardian').length;
+      const saved = payments.filter((p) => p.status === 'cancelled' || p.status === 'refunded')
+        .reduce((sum, p) => sum + p.amount, 0);
+      $('count-saved').textContent = money(saved, false);
+      $('synced').textContent = `Synced ${clock(new Date().toISOString())}`;
+    }
+
+    function memberRow(initialsText, avatarClass, name, sub, badgeText, badgeClass) {
+      const row = document.createElement('div');
+      row.className = 'p-2.5 rounded-lg bg-surface-container-low flex items-center justify-between gap-2';
+      row.innerHTML = `
+        <div class="flex items-center gap-2.5 min-w-0">
+          <div class="w-9 h-9 rounded-lg flex items-center justify-center font-bold text-label-lg shrink-0 ${avatarClass}"></div>
+          <div class="min-w-0"><p class="text-label-lg font-medium truncate"></p><p class="text-body-sm text-on-surface-variant truncate"></p></div>
+        </div>
+        <span class="px-2 py-0.5 text-label-sm rounded-md whitespace-nowrap ${badgeClass}"></span>`;
+      row.querySelector('.w-9').textContent = initialsText;
+      row.querySelector('.text-label-lg.font-medium').textContent = name;
+      row.querySelector('.text-body-sm').textContent = sub;
+      row.querySelector('span').textContent = badgeText;
+      return row;
+    }
+
+    function renderMembers(payments) {
+      const rows = MEMBERS.map((m) => {
+        const alerts = payments.filter((p) => p.sender === m.name && p.status === 'held_for_guardian').length;
+        return memberRow(initials(m.name),
+          alerts ? 'bg-tertiary-container/15 text-tertiary' : 'bg-secondary-container text-on-secondary-container',
+          m.name, `Usually sends about ${money(m.usual, false)}`,
+          alerts ? `${alerts} alert${alerts > 1 ? 's' : ''} active` : 'Protected',
+          alerts ? 'bg-error-container text-on-error-container' : 'bg-secondary-container text-on-secondary-container');
+      });
+      rows.push(memberRow('S', 'bg-primary-container text-white', 'Sarah (you)',
+        'Approves or cancels held payments', 'Admin', 'bg-surface-container-high text-on-surface-variant'));
+      $('members').replaceChildren(...rows);
+    }
+
+    function renderRules() {
+      if (!rules) return;
+      const items = [
+        ['payments', `Payments over ${money(rules.max_amount, false)} need you`],
+        ['person_add', rules.allow_new_recipients ? 'New recipients are allowed' : 'New recipients need you'],
+        ['timer', `${rules.cooling_off_minutes}-minute cooling-off for new payees`],
+        ['hourglass_bottom', `No answer in ${rules.hold_expiry_minutes / 60} h? Hold released`],
+      ];
+      if (rules.paused) items.unshift(['pause_circle', 'All payments are paused: everything is held for you']);
+      $('rules-list').replaceChildren(...items.map(([icon, text]) => {
+        const row = document.createElement('li');
+        row.className = 'p-2.5 rounded-lg bg-surface-container-low flex items-center gap-2.5 text-label-lg';
+        row.innerHTML = '<span class="icon text-[20px] text-primary"></span><span></span>';
+        row.firstChild.textContent = icon;
+        row.lastChild.textContent = text;
+        if (icon === 'pause_circle') row.classList.replace('bg-surface-container-low', 'bg-error-container');
+        return row;
+      }));
+
+      // Freeze / Pause all buttons and the live strip reflect the rule.
+      document.querySelectorAll('[data-pause-icon]').forEach((el) => { el.textContent = rules.paused ? 'play_circle' : 'pause_circle'; });
+      document.querySelectorAll('[data-pause-label]').forEach((el, i) => {
+        el.textContent = rules.paused ? 'Resume' : (i === 0 ? 'Freeze' : 'Pause all');
+      });
+      $('shield-state').textContent = rules.paused ? 'Payments paused' : 'Shield active';
+      $('shield-state').classList.toggle('text-error', rules.paused);
+      $('live-label').textContent = rules.paused ? 'All payments paused' : 'Real-time active guardrail';
+      $('live-label').classList.toggle('text-error', rules.paused);
+      ['live-ping', 'live-dot'].forEach((id) => {
+        $(id).classList.toggle('bg-primary', !rules.paused);
+        $(id).classList.toggle('bg-error', rules.paused);
+      });
+    }
+
+    function renderPayments(payments) {
+      $('payments-empty').classList.toggle('hidden', payments.length > 0);
+      $('payment-list').replaceChildren(...payments.map((p) => {
+        const [label, pill] = STATUS[p.status];
+        const row = document.createElement('li');
+        row.className = 'py-2.5 flex items-center justify-between gap-2';
+        row.innerHTML = `
+          <div class="min-w-0"><p class="text-label-lg font-medium truncate"></p><p class="text-body-sm text-on-surface-variant truncate"></p></div>
+          <div class="flex items-center gap-2 shrink-0"><span class="text-label-lg font-semibold tabular-nums"></span>
+            <span class="px-2 py-0.5 rounded-md text-label-sm ${pill}"></span></div>`;
+        row.querySelector('.text-label-lg.font-medium').textContent = p.recipient_name;
+        row.querySelector('.text-body-sm').textContent = `${p.sender} · ${clock(p.created_at)}`;
+        row.querySelector('.tabular-nums').textContent = money(p.amount);
+        row.querySelector('.rounded-md').textContent = label;
         if (p.status === 'approved') {
           // Sent already: the guardian can still pull it back if it turns out to be a scam.
           const btn = document.createElement('button');
-          btn.className = 'ml-2 text-xs font-semibold text-critical hover:underline disabled:opacity-60';
-          btn.textContent = 'Refund';
-          wireAction(btn, p.id, 'refund');
-          td[4].append(btn);
+          btn.type = 'button';
+          btn.className = 'text-label-sm font-semibold text-tertiary hover:underline disabled:opacity-60';
+          btn.innerHTML = '<span data-label>Refund</span>';
+          wireAction(btn, p, 'refund');
+          row.lastElementChild.append(btn);
         }
-        td[5].textContent = time(p);
-        return tr;
+        return row;
+      }));
+    }
+
+    function renderAudit(entries, payments) {
+      const byId = Object.fromEntries(payments.map((p) => [p.id, p]));
+      const recent = entries.slice(-8).reverse();
+      $('audit-empty').classList.toggle('hidden', recent.length > 0);
+      $('audit-list').replaceChildren(...recent.map((e) => {
+        const p = byId[e.payment_id];
+        const item = document.createElement('li');
+        item.className = 'relative flex items-start justify-between gap-2';
+        item.innerHTML = `
+          <span class="absolute -left-6 top-1 w-3 h-3 rounded-full ring-2 ring-white ${DOT[e.actor] || 'bg-secondary'}"></span>
+          <div class="min-w-0"><p class="text-label-md font-semibold"></p><p class="text-body-sm text-on-surface-variant truncate"></p></div>
+          <span class="text-label-sm text-secondary whitespace-nowrap shrink-0"></span>`;
+        item.querySelector('.text-label-md').textContent = AUDIT[e.action] || e.action.replaceAll('_', ' ');
+        item.querySelector('.text-body-sm').textContent = p
+          ? `${money(p.amount)} · ${p.sender} → ${p.recipient_name}`
+          : e.detail;
+        item.querySelector('.whitespace-nowrap').textContent = clock(e.timestamp);
+        return item;
       }));
     }
 
     async function refresh() {
       try {
-        const payments = await api('/api/payments');
-        $('count-checked').textContent = payments.length;
-        $('count-held').textContent = payments.filter((p) => p.risk?.verdict === 'hold').length;
-        $('count-blocked').textContent = payments.filter((p) => p.risk?.verdict === 'block').length;
+        const [payments, audit, latestRules] = await Promise.all([api('/api/payments'), api('/api/audit'), api('/api/rules')]);
+        lastPayments = payments;
+        rules = latestRules;
         renderHeld(payments);
-        renderActivity(payments);
-        $('error').classList.add('hidden');
+        renderTelemetry(payments);
+        renderMembers(payments);
+        renderRules();
+        renderPayments(payments);
+        renderAudit(audit, payments);
+        if ($('error').dataset.kind === 'offline') showError('');
       } catch (err) {
-        $('error').textContent = `Could not reach the server: ${err.message}`;
-        $('error').classList.remove('hidden');
+        $('error').dataset.kind = 'offline';
+        showError(`Could not reach the server: ${err.message}`);
       }
     }
 
-    function wireAction(btn, id, action) {
-      if (pending.has(`${id}:${action}`)) {
+    // ---- actions ----
+    function wireAction(btn, p, action) {
+      if (pending.has(`${p.id}:${action}`)) {
         btn.disabled = true;
-        btn.textContent = PENDING_LABEL[action];
+        btn.querySelector('[data-label]').textContent = PENDING_LABEL[action];
       }
-      btn.addEventListener('click', () => decide(id, action));
+      btn.addEventListener('click', () => {
+        if (action === 'approve' && p.risk?.verdict === 'block') return askOverride(p);
+        if (action === 'refund' && !confirm(`Refund ${money(p.amount)} to ${p.sender}? PayPal returns the money.`)) return;
+        decide(p.id, action);
+      });
     }
 
     async function decide(id, action) {
-      if (action === 'refund' && !confirm('Refund this payment? The money goes back to the sender.')) return;
       const key = `${id}:${action}`;
       pending.add(key);
       refresh();
@@ -255,36 +630,60 @@
       pending.delete(key);
       await refresh();
       if (failure) {
-        $('error').textContent = failure;
-        $('error').classList.remove('hidden');
+        $('error').dataset.kind = 'action';
+        showError(failure);
+      } else if (DONE_TOAST[action]) {
+        toast(DONE_TOAST[action]);
       }
     }
+
+    let overrideId = null;
+    function askOverride(p) {
+      overrideId = p.id;
+      $('override-text').textContent =
+        `Shield rated this ${p.risk.risk_level} risk. Approving sends ${money(p.amount)} from ${p.sender} to ${p.recipient_name} through PayPal right now.`;
+      $('override').classList.remove('hidden');
+    }
+    $('override-no').addEventListener('click', () => $('override').classList.add('hidden'));
+    $('override-yes').addEventListener('click', () => {
+      $('override').classList.add('hidden');
+      if (overrideId) decide(overrideId, 'approve');
+    });
+
+    document.querySelectorAll('[data-pause]').forEach((btn) => btn.addEventListener('click', async () => {
+      const paused = !rules?.paused;
+      try {
+        rules = await api('/api/rules/pause', { method: 'POST', body: JSON.stringify({ paused }) });
+        renderRules();
+        toast(paused ? 'All payments paused. Every new payment is held for you.' : 'Payments resumed. Shield is watching as normal.');
+      } catch (err) {
+        $('error').dataset.kind = 'action';
+        showError(`Could not change the pause: ${err.message}`);
+      }
+    }));
 
     $('btn-seed').addEventListener('click', async (e) => {
       const btn = e.currentTarget;
       btn.disabled = true;
-      btn.textContent = 'Shield is checking…';   // three Gemini calls, ~10s
+      $('seed-label').textContent = 'Checking…';   // three Shield checks, ~10s if not cached
       try {
         console.log('[guardian] seed', await api('/api/seed', { method: 'POST' }));
+        toast('Demo payments loaded.');
       } catch (err) {
         console.warn('[guardian] seed failed', err.message);
       }
       btn.disabled = false;
-      btn.textContent = 'Load demo data';
+      $('seed-label').textContent = 'Demo data';
       refresh();
     });
 
-    api('/api/rules').then((r) => {
-      const parts = [
-        r.paused ? 'ALL PAYMENTS PAUSED' : null,
-        `payments over $${r.max_amount} need you`,
-        r.allow_new_recipients ? 'new recipients allowed' : 'new recipients need you',
-        `${r.cooling_off_minutes}-min cooling-off for new payees`,
-        `unanswered holds are cancelled after ${r.hold_expiry_minutes / 60} h`,
-        'Rules can only make Shield stricter, never looser.',
-      ];
-      $('rules').textContent = `Family rules: ${parts.filter(Boolean).join(' · ')}`;
-    }).catch(() => {});
+    document.querySelectorAll('[data-tab]').forEach((tab) => tab.addEventListener('click', () => {
+      document.querySelectorAll('[data-tab]').forEach((t) => {
+        t.classList.toggle('text-primary', t === tab);
+        t.classList.toggle('font-semibold', t === tab);
+        t.classList.toggle('text-on-surface-variant', t !== tab);
+      });
+    }));
 
     refresh();
     setInterval(refresh, 3000);   // picks up payments the senior sends

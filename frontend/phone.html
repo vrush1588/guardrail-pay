@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grandma's Phone</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: { DEFAULT: '#1d4ed8', hover: '#1e40af' },
+            ink: '#0f172a', muted: '#64748b', critical: '#e11d48', warning: '#d97706',
+            success: '#059669', canvas: '#f8fafc', wash: '#f1f5f9', hairline: '#e2e8f0', keyline: '#cbd5e1',
+          },
+          fontFamily: { sans: ['Inter', '-apple-system', 'BlinkMacSystemFont', 'sans-serif'] },
+        },
+      },
+    };
+  </script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    body { -webkit-font-smoothing: antialiased; }
+    .wallpaper { background: linear-gradient(160deg, #dbeafe 0%, #e0e7ff 45%, #fce7f3 100%); }
+    .bubble-in { animation: bubble-in .25s ease-out; }
+    @keyframes bubble-in { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+  </style>
+</head>
+<body class="bg-canvas min-h-screen flex justify-center font-sans text-ink">
+  <div class="w-full max-w-[400px] min-h-screen relative overflow-hidden">
+
+    <!-- View: home screen (Grandma watching a show) -->
+    <section id="view-home" class="wallpaper min-h-screen px-5 pt-3 pb-6 flex flex-col">
+      <div class="flex justify-between text-sm font-semibold text-ink/80">
+        <span class="clock"></span><span aria-hidden="true">5G ▮▮▮ 82%</span>
+      </div>
+
+      <div class="text-center mt-8 mb-6">
+        <p class="clock text-[64px] leading-none font-bold tracking-tight"></p>
+        <p id="date" class="mt-2 text-[17px] font-medium text-ink/70"></p>
+      </div>
+
+      <!-- Tapping the show starts the scam call (presenter control; key C does the same). -->
+      <button type="button" id="now-watching" class="text-left rounded-2xl overflow-hidden shadow-sm bg-white/80 backdrop-blur border border-white">
+        <div class="h-32 bg-gradient-to-br from-emerald-400 via-lime-300 to-amber-200 flex items-center justify-center">
+          <div class="w-14 h-14 rounded-full bg-white/85 flex items-center justify-center shadow">
+            <svg class="w-6 h-6 text-emerald-700 ml-1" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M6 4.5v11l9-5.5-9-5.5z"/></svg>
+          </div>
+        </div>
+        <div class="p-3.5">
+          <p class="text-xs font-semibold uppercase tracking-wide text-muted">Now watching</p>
+          <p class="text-[18px] font-bold">Sunday Garden Show</p>
+          <p class="text-[15px] text-slate-600">Episode 12 · Planting spring roses</p>
+          <div class="mt-2.5 h-1.5 rounded-full bg-hairline"><div class="h-full w-2/5 rounded-full bg-emerald-600"></div></div>
+        </div>
+      </button>
+
+      <div id="hint" class="hidden mt-5 rounded-2xl bg-white/90 border border-white shadow-sm p-3.5 flex items-center gap-3 bubble-in">
+        <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center flex-shrink-0">
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        </div>
+        <p class="text-[15.5px] font-medium leading-snug">Sam needs $800 for Mike Turner. Open <span class="font-bold">Family Guardian</span> to send it.</p>
+      </div>
+
+      <div class="mt-auto pt-8 grid grid-cols-4 gap-y-5 text-center text-[12.5px] font-medium text-ink/80">
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-emerald-500 flex items-center justify-center text-2xl" aria-hidden="true">📞</div><p class="mt-1">Phone</p></div>
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-sky-500 flex items-center justify-center text-2xl" aria-hidden="true">💬</div><p class="mt-1">Messages</p></div>
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-white flex items-center justify-center text-2xl" aria-hidden="true">🖼️</div><p class="mt-1">Photos</p></div>
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-slate-700 flex items-center justify-center text-2xl" aria-hidden="true">📷</div><p class="mt-1">Camera</p></div>
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-blue-400 flex items-center justify-center text-2xl" aria-hidden="true">⛅</div><p class="mt-1">Weather</p></div>
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-white flex items-center justify-center text-2xl" aria-hidden="true">📅</div><p class="mt-1">Calendar</p></div>
+        <a href="/senior.html?fill=scam" id="app-guardian" class="block rounded-2xl">
+          <div id="app-guardian-icon" class="w-14 h-14 mx-auto rounded-2xl bg-primary text-white flex items-center justify-center transition-shadow">
+            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75L11.25 15 15 9.75m-3-7.036A11.959 11.959 0 013.598 6 11.99 11.99 0 003 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285z" />
+            </svg>
+          </div>
+          <p class="mt-1 font-semibold text-ink">Family Guardian</p>
+        </a>
+        <div><div class="w-14 h-14 mx-auto rounded-2xl bg-slate-400 flex items-center justify-center text-2xl" aria-hidden="true">⚙️</div><p class="mt-1">Settings</p></div>
+      </div>
+    </section>
+
+    <!-- View: incoming call -->
+    <section id="view-incoming" class="hidden min-h-screen bg-slate-900 text-white px-6 pt-16 pb-14 flex flex-col items-center">
+      <p class="text-slate-400 font-medium">Incoming call</p>
+      <div class="relative mt-10 w-28 h-28">
+        <span class="absolute inset-0 rounded-full bg-slate-500/40 animate-ping"></span>
+        <div class="relative w-28 h-28 rounded-full bg-slate-600 flex items-center justify-center text-5xl font-semibold">?</div>
+      </div>
+      <h1 class="mt-8 text-[30px] font-bold tracking-tight">Unknown caller</h1>
+      <p class="mt-1 text-[18px] text-slate-300">+1 (555) 013-2291</p>
+      <div class="mt-auto w-full flex justify-around">
+        <div class="text-center">
+          <button type="button" id="btn-decline" aria-label="Decline" class="w-[72px] h-[72px] rounded-full bg-critical flex items-center justify-center">
+            <svg class="w-8 h-8 rotate-[135deg]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+          </button>
+          <p class="mt-2 text-sm text-slate-300">Decline</p>
+        </div>
+        <div class="text-center">
+          <button type="button" id="btn-accept" aria-label="Accept" class="w-[72px] h-[72px] rounded-full bg-success flex items-center justify-center animate-bounce">
+            <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+          </button>
+          <p class="mt-2 text-sm text-slate-300">Accept</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- View: in call, with live captions -->
+    <section id="view-call" class="hidden h-screen bg-slate-900 text-white px-5 pt-8 pb-8 flex flex-col">
+      <div class="text-center">
+        <h1 class="text-[24px] font-bold">Unknown caller</h1>
+        <p id="call-timer" class="mt-1 text-slate-300 tabular-nums">00:00</p>
+      </div>
+      <div id="captions" class="mt-6 flex-1 overflow-y-auto space-y-2.5 pr-1" aria-live="polite"></div>
+      <div class="pt-5 flex justify-around items-start">
+        <div class="text-center">
+          <button type="button" id="btn-mute" aria-pressed="false" class="w-16 h-16 rounded-full bg-slate-700 hover:bg-slate-600 flex items-center justify-center text-2xl">🔊</button>
+          <p id="mute-label" class="mt-2 text-sm text-slate-300">Speaker on</p>
+        </div>
+        <div class="text-center">
+          <button type="button" id="btn-hangup" aria-label="End call" class="w-16 h-16 rounded-full bg-critical flex items-center justify-center">
+            <svg class="w-7 h-7 rotate-[135deg]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+          </button>
+          <p class="mt-2 text-sm text-slate-300">End</p>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const $ = (id) => document.getElementById(id);
+    const VIEWS = ['view-home', 'view-incoming', 'view-call'];
+    const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+    function show(view) {
+      VIEWS.forEach((v) => $(v).classList.toggle('hidden', v !== view));
+    }
+
+    // The scam call: "them" is the scammer, "me" is Grandma. Each line is spoken and captioned.
+    const SCRIPT = [
+      ['them', "Grandma? Grandma, it's me. Can you hear me?"],
+      ['me',   'Sam? You sound different.'],
+      ['them', "I've got a bad cold. Grandma, I'm in really big trouble."],
+      ['them', "I was in a car accident. The police say it was my fault, and they're keeping me in jail."],
+      ['me',   'Oh no! Are you hurt?'],
+      ['them', "I'm okay, but I need eight hundred dollars for bail tonight, or I have to stay here."],
+      ['them', 'My lawyer is Mike Turner. Please send it to him on your payment app, right now.'],
+      ['them', "And please, please don't tell Mom and Dad. They'll be so angry. Promise me?"],
+      ['me',   "I promise. I'll send it now."],
+      ['them', 'Thank you, Grandma. I have to go. Hurry!'],
+    ];
+
+    // ---- clock ----
+    function tick() {
+      const now = new Date();
+      document.querySelectorAll('.clock').forEach((el) => {
+        el.textContent = now.toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' });
+      });
+      $('date').textContent = now.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+    }
+    tick();
+    setInterval(tick, 10000);
+
+    // ---- ringtone (Web Audio, no file) ----
+    let audio = null;
+    let ringTimer = null;
+    function ring() {
+      audio = audio || new AudioContext();
+      const burst = () => {
+        [440, 480].forEach((hz) => {
+          const osc = audio.createOscillator();
+          const gain = audio.createGain();
+          osc.frequency.value = hz;
+          gain.gain.setValueAtTime(0.08, audio.currentTime);
+          gain.gain.setValueAtTime(0, audio.currentTime + 1.2);
+          osc.connect(gain).connect(audio.destination);
+          osc.start();
+          osc.stop(audio.currentTime + 1.2);
+        });
+      };
+      burst();
+      ringTimer = setInterval(burst, 3000);
+    }
+    function stopRing() {
+      clearInterval(ringTimer);
+      ringTimer = null;
+    }
+
+    // ---- voice ----
+    const tts = 'speechSynthesis' in window ? window.speechSynthesis : null;
+    // Sam sounds young and rushed; Grandma slower and lower. Same voice twice still works.
+    const VOICES = {
+      // Male voices only ("Google US English" is female, so it is not listed).
+      them: { prefer: ['Guy', 'Andrew', 'Christopher', 'Brian', 'Eric', 'Ryan', 'Google UK English Male', 'David', 'Mark'], rate: 1.05, pitch: 1.1, voice: null },
+      me:   { prefer: ['Aria', 'Jenny', 'Michelle', 'Zira', 'Google UK English Female', 'Samantha', 'Susan', 'Hazel'], rate: 0.9, pitch: 0.85, voice: null },
+    };
+    let muted = !tts;
+    function pickVoice() {
+      const voices = tts.getVoices().filter((v) => v.lang.startsWith('en'));
+      const fallback = voices.find((v) => v.lang === 'en-US') || voices[0] || null;
+      Object.entries(VOICES).forEach(([who, cfg]) => {
+        const match = cfg.prefer.map((name) => voices.find((v) => v.name.includes(name))).find(Boolean);
+        cfg.voice = match || fallback;
+        // No male voice installed: pitch the fallback down so Sam still doesn't sound like Grandma.
+        if (who === 'them') cfg.pitch = match ? 1.1 : 0.6;
+      });
+      console.log('[phone] voices', { sam: VOICES.them.voice?.name, grandma: VOICES.me.voice?.name },
+                  'available:', voices.map((v) => v.name));
+    }
+    if (tts) {
+      pickVoice();
+      tts.addEventListener('voiceschanged', pickVoice);
+    }
+
+    const readTime = (text) => Math.max(1800, text.split(/\s+/).length * 380);
+
+    // Resolves when the line has been spoken (or, when muted, after a reading-time pause).
+    function say(who, text) {
+      if (muted) return wait(readTime(text));
+      return new Promise((resolve) => {
+        const { voice, rate, pitch } = VOICES[who];
+        const u = new SpeechSynthesisUtterance(text);
+        if (voice) u.voice = voice;
+        u.rate = rate;
+        u.pitch = pitch;
+        const safety = setTimeout(resolve, readTime(text) + 4000);  // onend sometimes never fires in Chrome
+        u.onend = u.onerror = () => { clearTimeout(safety); resolve(); };
+        tts.speak(u);
+      });
+    }
+
+    function caption(who, text) {
+      const row = document.createElement('div');
+      row.className = `flex bubble-in ${who === 'me' ? 'justify-end' : 'justify-start'}`;
+      const bubble = document.createElement('p');
+      bubble.className = who === 'me'
+        ? 'max-w-[80%] rounded-2xl rounded-br-md bg-primary px-3.5 py-2 text-[16.5px] leading-snug'
+        : 'max-w-[85%] rounded-2xl rounded-bl-md bg-slate-700 px-3.5 py-2 text-[17.5px] leading-snug font-medium';
+      bubble.textContent = text;
+      row.append(bubble);
+      $('captions').append(row);
+      row.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+
+    // ---- call flow ----
+    let callRun = 0;        // bumped on hang-up/reset so a running script stops
+    let callTimer = null;
+
+    function incoming() {
+      if (!$('view-home').classList.contains('hidden')) {
+        $('hint').classList.add('hidden');
+        show('view-incoming');
+        ring();
+      }
+    }
+
+    async function accept() {
+      stopRing();
+      const run = ++callRun;
+      $('captions').replaceChildren();
+      show('view-call');
+      const started = Date.now();
+      clearInterval(callTimer);
+      callTimer = setInterval(() => {
+        const s = Math.floor((Date.now() - started) / 1000);
+        $('call-timer').textContent = `${String(Math.floor(s / 60)).padStart(2, '0')}:${String(s % 60).padStart(2, '0')}`;
+      }, 500);
+
+      await wait(700);
+      for (const [who, text] of SCRIPT) {
+        if (run !== callRun) return;
+        caption(who, text);
+        await say(who, text);
+        await wait(250);
+      }
+      if (run === callRun) endCall(true);
+    }
+
+    async function endCall(scamDone) {
+      callRun++;
+      tts?.cancel();
+      clearInterval(callTimer);
+      $('call-timer').textContent = 'Call ended';
+      await wait(1200);
+      goHome(scamDone);
+    }
+
+    function goHome(withHint) {
+      callRun++;
+      stopRing();
+      tts?.cancel();
+      clearInterval(callTimer);
+      $('hint').classList.toggle('hidden', !withHint);
+      $('app-guardian-icon').classList.toggle('ring-4', withHint);
+      $('app-guardian-icon').classList.toggle('ring-primary/40', withHint);
+      $('app-guardian-icon').classList.toggle('animate-pulse', withHint);
+      show('view-home');
+    }
+
+    function setMuted(value) {
+      muted = value || !tts;
+      if (muted) tts?.cancel();
+      $('btn-mute').textContent = muted ? '🔇' : '🔊';
+      $('btn-mute').setAttribute('aria-pressed', String(muted));
+      $('mute-label').textContent = muted ? 'Captions only' : 'Speaker on';
+    }
+    setMuted(muted);
+
+    $('now-watching').addEventListener('click', incoming);
+    $('btn-accept').addEventListener('click', accept);
+    $('btn-decline').addEventListener('click', () => goHome(false));
+    $('btn-hangup').addEventListener('click', () => endCall(false));
+    $('btn-mute').addEventListener('click', () => setMuted(!muted));
+
+    // Presenter shortcuts: C = incoming call, R = reset to home.
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'c' || e.key === 'C') incoming();
+      if (e.key === 'r' || e.key === 'R') goHome(false);
+    });
+  </script>
+</body>
+</html>

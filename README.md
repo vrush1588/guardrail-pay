@@ -6,6 +6,24 @@ the funds and a family guardian decides whether it goes through.
 
 Built for the *Build What's Next with PayPal and AI* hackathon.
 
+## Try it live
+
+**https://guardrail-pay.onrender.com** <!-- TODO: replace with the real Render URL -->
+
+Best viewed on a phone, or in two browser windows side by side:
+
+1. Open **[/guardian.html](https://guardrail-pay.onrender.com/guardian.html)** (the family guardian, Sarah) and tap **Demo data**.
+2. Open **[/phone.html](https://guardrail-pay.onrender.com/phone.html)** (Grandma Rose's phone). Turn the sound up,
+   tap the *Sunday Garden Show* card and accept the call.
+3. When the call ends, tap **Family Guardian**: the payment is already filled in. Tap **Send**.
+4. PayPal Sandbox opens. Log in with **any PayPal Sandbox Personal account**, yours or the test login
+   in our submission notes, and approve. No real money moves.
+5. Grandma sees "Wait. This payment may be a scam." On the guardian page, open the new card, tap
+   **Call Grandma first: what to ask**, then **Cancel payment**. PayPal voids the hold.
+
+The free server sleeps when idle: the first visit can take about a minute, and it starts with no
+data (tap **Demo data**). If PayPal says it doesn't accept your currency, use our US test login.
+
 ## The problem
 
 Scams aimed at older adults ("your grandson is in jail, send bail money now, don't tell
@@ -26,7 +44,7 @@ pressured, who is the one least able to stop and think.
    "Wait. This payment may be a scam" screen with the reasons, and go to the guardian.
 6. **On the dashboard, the guardian approves (PayPal capture) or cancels (PayPal void).**
    A cancelled payment never leaves the account. The senior's screen updates live.
-7. **"What should I ask?"** Shield writes a short phone script for the guardian: a calm
+7. **"Call Grandma first: what to ask"** Shield writes a short phone script for the guardian: a calm
    opening, 3–4 questions specific to that payment, and what to do if it is a scam.
 8. **Nothing stays held indefinitely.** If the guardian doesn't answer within the family's
    time limit (24 hours by default), the hold is voided and nothing is sent.
@@ -146,7 +164,7 @@ Get a free key at https://aistudio.google.com/apikey and set `GEMINI_API_KEY` in
 Each payment from the senior screen now opens PayPal, where the senior logs in with the
 sandbox Personal account and approves. Back in Guardrail, the funds are authorized, Shield
 scores the payment, and the guardian's Approve and Cancel run real captures and voids.
-You can check them under the sandbox account's activity. **Load demo data** always uses
+You can check them under the sandbox account's activity. **Demo data** always uses
 mock PayPal ids, because no one is there to approve those payments on PayPal.
 
 If PayPal rejects an order because of the account's country or currency, add a US
@@ -164,13 +182,13 @@ sandbox *Business* account and make it the app's account.
 
 Each alert is flat JSON. `event` is `payment_held` or `hold_expired`, and the other
 fields are `headline`, `sender`, `recipient`, `amount`, `note`, `risk_level`, `verdict`,
-`reason`, `signals`, `review_url`, `payment_id` and `created_at`. **Load demo data** never
+`reason`, `signals`, `review_url`, `payment_id` and `created_at`. **Demo data** never
 sends alerts. Without `ZAPIER_HOOK_URL`, alerts are only written to the server log.
 Alerts are sent in the background, so a slow or failing webhook never delays a payment.
 
 ## Demo walkthrough (about 4 minutes)
 
-1. **Guardian → Load demo data.** Three payments come in:
+1. **Guardian → Demo data.** Three payments come in:
    - $800 to "Mike Turner", a new recipient: *"URGENT - your grandson needs bail money
      tonight, don't tell his parents"* → Shield: **high** → **blocked**, waiting for the guardian
    - $5 to School Cafe, a known payee → **low** → **sent** right away
@@ -182,11 +200,11 @@ Alerts are sent in the background, so a slow or failing webhook never delays a p
    asks the family).
 4. **Guardian:** the payment appears under *Needs your decision* with Shield's reasons
    and the family rules it hit. If Zapier is set up, the guardian's alert arrives at the
-   same moment. Click **What should I ask?** to get Shield's phone
+   same moment. Click **Call Grandma first: what to ask** to get Shield's phone
    script for the call.
 5. **Guardian → Cancel.** The funds are voided, nothing is sent, and the senior's screen
    updates within 2 seconds.
-6. **Guardian → Refund** on the $5 School Cafe payment in *All activity*. The money
+6. **Guardian → Refund** on the $5 School Cafe payment in *All payments*. The money
    goes back to the sender (PayPal refund).
 7. Open http://127.0.0.1:8000/api/audit to see every decision Shield, the rules and the
    guardian made.
@@ -204,7 +222,7 @@ Senior screen ── POST /api/payments
                    │
                    ├─ allow ─────────► PayPal capture  → "approved"
                    └─ hold / block ──► guardian dashboard  (+ Zapier alert to the guardian)
-                                         ├─ What should I ask? → Shield call script
+                                         ├─ "what to ask" → Shield call script
                                          ├─ Approve → PayPal capture  (later: Refund → PayPal refund)
                                          ├─ Cancel  → PayPal void
                                          └─ no answer in 24 h → PayPal void
@@ -235,6 +253,7 @@ Every step is written to the audit log.
 | POST | `/api/payments/{id}/call-script` | Shield's phone script for a held payment (made once, then kept) |
 | GET | `/api/paypal/return`, `/api/paypal/cancel` | Where PayPal sends the payer after approving or cancelling |
 | GET | `/api/rules` | The family rules |
+| POST | `/api/rules/pause` | Freeze or resume all payments: `{"paused": true}` holds every new payment for the guardian |
 | GET | `/api/audit` | Audit log |
 | POST | `/api/seed` | Reset and load the three demo payments |
 

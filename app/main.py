@@ -5,7 +5,7 @@ from contextlib import asynccontextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
 
-from fastapi import FastAPI, HTTPException
+from fastapi import Body, FastAPI, HTTPException
 from fastapi.responses import RedirectResponse
 from fastapi.staticfiles import StaticFiles
 
@@ -44,6 +44,7 @@ async def lifespan(_: FastAPI):
     paypal_mode = f"sandbox {PAYPAL_BASE}" if paypal.SANDBOX else "mock"
     alerts_mode = "Zapier" if alerts.ENABLED else "log only"
     print(f"\n  guardrail is running (PayPal: {paypal_mode}, Shield: {shield_mode}, Alerts: {alerts_mode})")
+    print(f"    Phone:    {BASE_URL}/phone.html")
     print(f"    Senior:   {BASE_URL}/senior.html")
     print(f"    Guardian: {BASE_URL}/guardian.html\n", flush=True)
     expiry = asyncio.create_task(_expiry_loop())
@@ -279,6 +280,14 @@ def paypal_cancel(payment_id: str):
 
 @app.get("/api/rules", response_model=GuardianRules)
 def get_rules():
+    return store.guardian_rules
+
+
+@app.post("/api/rules/pause", response_model=GuardianRules)
+def set_paused(paused: bool = Body(embed=True)):
+    """The guardian's freeze switch. While paused, every new payment is held for them."""
+    store.guardian_rules.paused = paused
+    store.audit("guardian", "paused" if paused else "resumed", "", "all new payments")
     return store.guardian_rules
 
 

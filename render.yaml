@@ -1,0 +1,27 @@
+# Render Blueprint: New > Blueprint in the Render dashboard, pick this repo.
+# Secrets (sync: false) are asked for once in the dashboard and never stored in git.
+services:
+  - type: web
+    name: guardrail-pay
+    runtime: python
+    plan: free
+    branch: guardrail-skeleton
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/rules
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.12.8
+      - key: PAYPAL_MODE
+        value: sandbox
+      - key: PAYPAL_BASE
+        value: https://api-m.sandbox.paypal.com
+      - key: PAYPAL_CLIENT_ID
+        sync: false
+      - key: PAYPAL_SECRET
+        sync: false
+      - key: GEMINI_API_KEY
+        sync: false
+      - key: ZAPIER_HOOK_URL
+        sync: false
+      # GUARDRAIL_BASE_URL is not needed: the app uses Render's RENDER_EXTERNAL_URL.

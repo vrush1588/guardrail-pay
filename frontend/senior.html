@@ -121,6 +121,25 @@
     </section>
   </div>
 
+  <!-- Overlay: calling family (demo only; the guardian still decides on their dashboard) -->
+  <div id="call-overlay" class="hidden fixed inset-0 z-10 flex justify-center bg-slate-900">
+    <div class="w-full max-w-[400px] px-6 pt-16 pb-14 flex flex-col items-center text-white">
+      <p class="text-slate-400 font-medium">Calling…</p>
+      <div class="relative mt-10 w-28 h-28">
+        <span class="absolute inset-0 rounded-full bg-primary/40 animate-ping"></span>
+        <div class="relative w-28 h-28 rounded-full bg-primary flex items-center justify-center text-5xl font-semibold">S</div>
+      </div>
+      <h1 class="mt-8 text-[30px] font-bold tracking-tight">Sarah</h1>
+      <p class="mt-1 text-[18px] text-slate-300">Your daughter</p>
+      <div class="mt-auto text-center">
+        <button type="button" id="btn-end-call" aria-label="End call" class="w-[72px] h-[72px] rounded-full bg-critical flex items-center justify-center">
+          <svg class="w-8 h-8 rotate-[135deg]" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"/></svg>
+        </button>
+        <p class="mt-2 text-sm text-slate-300">End</p>
+      </div>
+    </div>
+  </div>
+
   <script>
     const $ = (id) => document.getElementById(id);
     const VIEWS = ['view-form', 'view-alert', 'view-result'];
@@ -225,8 +244,10 @@
     });
 
     $('btn-call').addEventListener('click', () => {
-      console.log('[senior] call-family', current?.id);   // TODO: tel: link / call bridge
+      console.log('[senior] call-family', current?.id);
+      $('call-overlay').classList.remove('hidden');
     });
+    $('btn-end-call').addEventListener('click', () => $('call-overlay').classList.add('hidden'));
 
     $('btn-send-anyway').addEventListener('click', () => {
       // The payment is already held for the guardian; this just tells the senior so.
@@ -254,13 +275,21 @@
       scam: { recipient_name: 'Mike Turner', amount: 800, note: 'URGENT - your grandson needs bail money tonight' },
       safe: { recipient_name: 'School Cafe', amount: 5, note: 'Lunch' },
     };
-    document.querySelectorAll('[data-fill]').forEach((b) => b.addEventListener('click', () => {
+    function fill(key) {
       const form = $('send-form');
-      Object.entries(FILLS[b.dataset.fill]).forEach(([k, v]) => { form.elements[k].value = v; });
-    }));
+      Object.entries(FILLS[key]).forEach(([k, v]) => { form.elements[k].value = v; });
+    }
+    document.querySelectorAll('[data-fill]').forEach((b) => b.addEventListener('click', () => fill(b.dataset.fill)));
+
+    // Opened from the phone demo after the scam call: /senior.html?fill=scam
+    const params = new URLSearchParams(location.search);
+    if (params.get('fill') in FILLS) {
+      fill(params.get('fill'));
+      history.replaceState(null, '', location.pathname);
+    }
 
     // Back from PayPal: show where that payment ended up.
-    const returnedId = new URLSearchParams(location.search).get('payment');
+    const returnedId = params.get('payment');
     if (returnedId) {
       history.replaceState(null, '', location.pathname);
       api(`/api/payments/${returnedId}`).then((p) => {

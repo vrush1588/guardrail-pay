@@ -12,7 +12,9 @@ PAYPAL_MODE = os.getenv("PAYPAL_MODE", "mock").strip().lower()
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY", "").strip()
 GEMINI_MODEL = os.getenv("GEMINI_MODEL", "gemini-2.5-flash")
 
-BASE_URL = os.getenv("GUARDRAIL_BASE_URL", "http://127.0.0.1:8000")
+# Render sets RENDER_EXTERNAL_URL (https://<service>.onrender.com), so no URL to copy there.
+BASE_URL = (os.getenv("GUARDRAIL_BASE_URL") or os.getenv("RENDER_EXTERNAL_URL")
+            or "http://127.0.0.1:8000").rstrip("/")
 
 # Zapier "Catch Hook" URL; held payments are sent there to alert the guardian.
 ZAPIER_HOOK_URL = os.getenv("ZAPIER_HOOK_URL", "").strip()

@@ -70,7 +70,7 @@
 
       <div class="mt-6 pt-4 border-t border-hairline text-sm text-muted">
         Demo fill:
-        <button type="button" data-fill="scam" class="underline hover:text-ink">Mike Turner $800</button> ·
+        <button type="button" data-fill="call" class="underline hover:text-ink">Kevin Brooks $800</button> ·
         <button type="button" data-fill="safe" class="underline hover:text-ink">School Cafe $5</button>
       </div>
     </section>
@@ -280,9 +280,8 @@
     });
 
     const FILLS = {
-      scam: { recipient_name: 'Mike Turner', amount: 800, note: 'URGENT - your grandson needs bail money tonight' },
-      // The phone.html scam call. A different payee than the demo data, so after "Demo data"
-      // the recipient is still new and the live card is easy to tell apart.
+      // The scam from the phone.html call (also the quick-fill). Not in the demo data, so after
+      // "Demo data" Kevin is still a new recipient and Shield's saved answers match.
       call: { recipient_name: 'Kevin Brooks', amount: 800, note: 'Bail for my grandson Sam tonight - please hurry, do not tell his parents' },
       safe: { recipient_name: 'School Cafe', amount: 5, note: 'Lunch' },
     };

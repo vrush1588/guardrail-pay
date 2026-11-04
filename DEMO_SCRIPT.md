@@ -39,10 +39,9 @@ Show the guardian dashboard, empty. Speak to camera.
 
 | Do | Say |
 | --- | --- |
-| Click **Demo data** (top right). Wait for the three payments to appear. | "This is the guardian's view. Every payment from the family goes through here. Here's a typical day." |
+| Click **Demo data** (top right). Wait for the two payments to appear. | "This is the guardian's view. Every payment from the family goes through here. Here's a typical day." |
 | Point at the $5 School Cafe row in *All payments*, status **Sent**. | "Leo's $5 lunch: a known payee, a normal amount. Shield says low risk, so it went straight through." |
 | Point at the GameWorld Store card under *Needs your decision*. | "Leo again, $60 on a game at 11:40 pm. That's 6 times his usual spend and over the family's $50 limit, so it's held." |
-| Point at the Mike Turner card: **HIGH RISK** badge, the red *Shield AI* box and the grey *Family rule triggered* box. | "And the $800 bail-money message to Grandma, blocked. Shield, our AI, read the note and spotted the classic grandparent scam." |
 | Point at *Shield telemetry* and *Family rules* (right column on a laptop). | "These are the family's own rules. They can only make Shield stricter, never looser." |
 
 ## Scene 2: a safe payment goes straight through (1:00–1:20)
@@ -65,7 +64,7 @@ This is the key moment, so slow down here.
 | Point at **Call my family**, **Cancel** and **Send anyway**. Don't click them (Call my family opens a calling screen; End closes it). | "She stays in control. Even *Send anyway* doesn't send: it asks the family first." |
 | Switch to the email tab. The Zapier alert arrives with the subject *"Grandma Rose is trying to send $800.00 USD to Kevin Brooks. Shield says high risk."* | "At the same moment, her guardian gets this email through Zapier, with the reasons and a link to the dashboard." |
 | Switch to the guardian dashboard. The new Kevin Brooks card is at the top of *Needs your decision*. Click **Call Grandma first: what to ask** | "Before deciding, the guardian should call Grandma. Shield writes what to ask." |
-| Read one or two questions from the script panel. | "*Did you talk to your grandson yourself today, using the phone number you always use for him?* It never tells her to call Mike back, because Mike may be the scammer." |
+| Read one or two questions from the script panel. | "*Did you talk to your grandson yourself today, using the phone number you always use for him?* It never tells her to call Kevin back, because Kevin may be the scammer." |
 
 If the email hasn't arrived after 15 seconds, carry on and come back to the inbox at the end of Scene 4.
 
@@ -111,11 +110,11 @@ Say one of these about PayPal, depending on the startup line:
 
 | Problem | What to do |
 | --- | --- |
-| Gemini is down or rate-limited | Use only the **School Cafe $5** and **Mike Turner $800** quick-fills, and click **Demo data** first. Those all replay saved answers. A typed-in payment calls Gemini live and may be held as "Shield could not check this payment". If that happens, say "that's the fail-safe: if the AI can't check it, it's held." |
+| Gemini is down or rate-limited | Use only the **School Cafe $5** and **Kevin Brooks $800** quick-fills, and click **Demo data** first. Those all replay saved answers. A typed-in payment calls Gemini live and may be held as "Shield could not check this payment". If that happens, say "that's the fail-safe: if the AI can't check it, it's held." |
 | The Zapier email is slow | Carry on and show the inbox at the end. Keep a screenshot of an earlier alert email as a backup. |
 | Port 8000 is already in use | `Get-NetTCPConnection -LocalPort 8000`, then `Stop-Process -Id <id>`, and start the server again. |
 | Presenting between 11 pm and 5 am | The saved answers are for daytime, so Shield calls Gemini live. Rehearse at the real time, or run that rehearsal once with Gemini up so the late-night answers get saved. |
-| Two scam cards are showing | Expected: Mike Turner is from the demo data, Kevin Brooks is the one Grandma just sent. |
+| Kevin Brooks has no "never seen this person" line, or Shield is slow | Kevin was already paid in this session. Click **Demo data** to reset before each run. |
 | The screen looks wrong after a dry run | Click **Demo data** to reset everything. |
 
 ## Likely judge questions

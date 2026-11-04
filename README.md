@@ -180,7 +180,7 @@ sandbox *Business* account and make it the app's account.
 1. In Zapier, create a Zap with the trigger **Webhooks by Zapier → Catch Hook**, and
    copy its URL into `.env` as `ZAPIER_HOOK_URL`. Restart the server; startup prints
    `Alerts: Zapier`.
-2. Send a risky payment from the senior screen (for example Mike Turner $800), so Zapier
+2. Send a risky payment from the senior screen (for example Kevin Brooks $800), so Zapier
    receives a sample alert to build the next step from.
 3. Add an action such as **Email by Zapier**, **Gmail**, **SMS by Zapier** or **Slack**.
    Use `headline` as the subject, and `reason`, `signals` and `review_url` in the body.
@@ -193,14 +193,14 @@ Alerts are sent in the background, so a slow or failing webhook never delays a p
 
 ## Demo walkthrough (about 4 minutes)
 
-1. **Guardian → Demo data.** Three payments come in:
-   - $800 to "Mike Turner", a new recipient: *"URGENT - your grandson needs bail money
-     tonight, don't tell his parents"* → Shield: **high** → **blocked**, waiting for the guardian
+1. **Guardian → Demo data.** Two payments come in:
    - $5 to School Cafe, a known payee → **low** → **sent** right away
    - $60 to GameWorld Store from Leo (age 12) at 11:40 pm, 6 times his usual amount and
      over the $50 family cap → **medium** → **held**
 2. **Senior → click "School Cafe $5" → Send.** The payment goes through: "Payment sent".
-3. **Senior → click "Mike Turner $800" → Send.** The senior sees *"Wait. This payment may be a
+3. **Senior → click "Kevin Brooks $800" → Send** (or play the scam call on `/phone.html`).
+   The note says *"Bail for my grandson Sam tonight - please hurry, do not tell his
+   parents"*, and Shield rates it **high** → **blocked**. The senior sees *"Wait. This payment may be a
    scam"* with Shield's reasons, and can Call my family, Cancel, or Send anyway (which
    asks the family).
 4. **Guardian:** the payment appears under *Needs your decision* with Shield's reasons
@@ -260,7 +260,7 @@ Every step is written to the audit log.
 | GET | `/api/rules` | The family rules |
 | POST | `/api/rules/pause` | Freeze or resume all payments: `{"paused": true}` holds every new payment for the guardian |
 | GET | `/api/audit` | Audit log |
-| POST | `/api/seed` | Reset and load the three demo payments |
+| POST | `/api/seed` | Reset and load the demo payments |
 
 ### Configuration (`.env`)
 

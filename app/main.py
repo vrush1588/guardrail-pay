@@ -27,9 +27,9 @@ def _last_night_at(hour: int, minute: int) -> datetime:
     return local.replace(hour=hour, minute=minute, second=0, microsecond=0)
 
 
+# No scam here on purpose: the scam is the one Grandma sends live (Kevin Brooks), so it is
+# the only scam card on the guardian screen and Kevin is still a new recipient.
 SEED_SCENARIOS = [
-    (PaymentCreate(sender="Grandma Rose", recipient_name="Mike Turner", amount=800,
-                   note="URGENT - your grandson needs bail money tonight, don't tell his parents"), None),
     (PaymentCreate(sender="Leo (age 12)", recipient_name="School Cafe", amount=5,
                    note="Lunch"), None),
     (PaymentCreate(sender="Leo (age 12)", recipient_name="GameWorld Store", amount=60,
@@ -298,7 +298,7 @@ def get_audit():
 
 @app.post("/api/seed", response_model=list[Payment])
 def seed():
-    """Reset the store and load the three demo scenarios. Always mock PayPal: no payer
+    """Reset the store and load the demo scenarios. Always mock PayPal: no payer
     is there to approve sandbox orders. No guardian alerts for demo data."""
     store.reset()
     return [process_payment(data, at() if at else None, mock=True, alert=False)

@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>Family Guardian – Guardian</title>
+  <!-- Installable as the "Guardian" phone app -->
+  <link rel="manifest" href="/manifest-guardian.json">
+  <meta name="theme-color" content="#f8f9ff">
+  <link rel="icon" href="/icons/guardian-192.png">
+  <link rel="apple-touch-icon" href="/icons/guardian-apple.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Guardian">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     // Tokens from the Stitch export (design_ss/.../family_guardian_mobile_alerts).
@@ -687,6 +695,9 @@
 
     refresh();
     setInterval(refresh, 3000);   // picks up payments the senior sends
+
+    // Installable app; only available over HTTPS (or localhost).
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
   </script>
 </body>
 </html>

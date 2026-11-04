@@ -24,6 +24,11 @@ Best viewed on a phone, or in two browser windows side by side:
 The free server sleeps when idle: the first visit can take about a minute, and it starts with no
 data (tap **Demo data**). If PayPal says it doesn't accept your currency, use our US test login.
 
+**Install it as phone apps.** Both screens are installable web apps (PWAs). On Android Chrome, open
+`/senior.html` and choose **⋮ → Install app** (or *Add to Home screen*) to get **Family Pay**, then do
+the same on `/guardian.html` for **Guardian**. On iPhone Safari, use **Share → Add to Home Screen**.
+They open full screen from the home screen, like any other app.
+
 ## The problem
 
 Scams aimed at older adults ("your grandson is in jail, send bail money now, don't tell

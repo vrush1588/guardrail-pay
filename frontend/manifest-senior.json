@@ -1,0 +1,17 @@
+{
+  "id": "/senior.html",
+  "name": "Family Guardian",
+  "short_name": "Family Pay",
+  "description": "Send money safely. Your family checks risky payments before they go.",
+  "start_url": "/senior.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#ffffff",
+  "theme_color": "#ffffff",
+  "icons": [
+    { "src": "/icons/senior-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/senior-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icons/senior-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

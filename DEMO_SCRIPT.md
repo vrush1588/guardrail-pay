@@ -18,6 +18,8 @@ answers are kept separately for daytime and for 11 pm–5 am.
 - [ ] Check the Zap is published and on in Zapier.
 - [ ] Do one dry run, then click **Demo data** to reset. It clears everything and sends no emails.
 - [ ] Zoom the browser to about 125% so the judges can read the screens.
+- [ ] For a phone recording: from the Render (https) link, install **Family Pay** (`/senior.html`) and
+      **Guardian** (`/guardian.html`) via Chrome **⋮ → Install app**, so both icons are on the home screen.
 - [ ] Turn the laptop volume up and play the `/phone.html` call once, so the browser loads its voice.
       Press **R** to reset it. If audio fails on the day, tap 🔊 during the call for captions only.
 

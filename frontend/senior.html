@@ -4,6 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Family Guardian – Send Money</title>
+  <!-- Installable as the "Family Pay" phone app -->
+  <link rel="manifest" href="/manifest-senior.json">
+  <meta name="theme-color" content="#ffffff">
+  <link rel="icon" href="/icons/senior-192.png">
+  <link rel="apple-touch-icon" href="/icons/senior-apple.png">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-title" content="Family Pay">
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
@@ -298,6 +306,9 @@
         showPayment(p);
       }).catch((err) => console.warn('[senior] could not load payment', err.message));
     }
+
+    // Installable app; only available over HTTPS (or localhost).
+    if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
   </script>
 </body>
 </html>

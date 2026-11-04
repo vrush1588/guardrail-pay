@@ -281,6 +281,9 @@
 
     const FILLS = {
       scam: { recipient_name: 'Mike Turner', amount: 800, note: 'URGENT - your grandson needs bail money tonight' },
+      // The phone.html scam call. A different payee than the demo data, so after "Demo data"
+      // the recipient is still new and the live card is easy to tell apart.
+      call: { recipient_name: 'Kevin Brooks', amount: 800, note: 'Bail for my grandson Sam tonight - please hurry, do not tell his parents' },
       safe: { recipient_name: 'School Cafe', amount: 5, note: 'Lunch' },
     };
     function fill(key) {
@@ -289,7 +292,7 @@
     }
     document.querySelectorAll('[data-fill]').forEach((b) => b.addEventListener('click', () => fill(b.dataset.fill)));
 
-    // Opened from the phone demo after the scam call: /senior.html?fill=scam
+    // Opened from the phone demo after the scam call: /senior.html?fill=call
     const params = new URLSearchParams(location.search);
     if (params.get('fill') in FILLS) {
       fill(params.get('fill'));

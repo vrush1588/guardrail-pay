@@ -399,5 +399,194 @@
       ],
       "reason": "This is the first time you are sending money to Mary Smith."
     }
+  },
+  "c32169bc4048c4ef": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:08:04+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "MMeera ",
+      "recipient_is_new": true,
+      "amount": 10.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "test mm"
+    },
+    "result": {
+      "risk_level": "medium",
+      "signals": [
+        "You have never paid MMeera before."
+      ],
+      "reason": "This is the first time you are sending money to MMeera."
+    }
+  },
+  "02dbb22ef9cdce8a": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:10:25+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "test",
+      "recipient_is_new": true,
+      "amount": 9.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "ts"
+    },
+    "result": {
+      "risk_level": "medium",
+      "signals": [
+        "You have never paid 'test' before."
+      ],
+      "reason": "This is a new person you are paying, which is unusual."
+    }
+  },
+  "56edf04321a12aca": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:13:27+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "teena",
+      "recipient_is_new": true,
+      "amount": 9.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "tes"
+    },
+    "result": {
+      "risk_level": "medium",
+      "signals": [
+        "You have never paid Teena before."
+      ],
+      "reason": "This is the first time you are sending money to Teena."
+    }
+  },
+  "117d5e85f5a9f97e": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:28:53+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Bail for my grandson Sam tonight - please hurry, do not tell his parents"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Kevin Brooks before.",
+        "The amount is much larger than you usually send.",
+        "The note mentions bail for a relative, which is a common scam.",
+        "The note asks you to hurry.",
+        "The note asks you to keep it a secret."
+      ],
+      "reason": "This payment has several signs of a scam, including a new recipient, a much larger amount than usual, and a note asking for bail money for a relative while urging secrecy and haste."
+    }
+  },
+  "6174ba1509b7620f": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:28:58+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Bail for my grandson Sam tonight - please hurry, do not tell his parents",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "You have never paid Kevin Brooks before.",
+          "The amount is much larger than you usually send.",
+          "The note mentions bail for a relative, which is a common scam.",
+          "The note asks you to hurry.",
+          "The note asks you to keep it a secret.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: new recipients need a guardian."
+        ],
+        "reason": "This payment has several signs of a scam, including a new recipient, a much larger amount than usual, and a note asking for bail money for a relative while urging secrecy and haste."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800.",
+      "questions": [
+        "Did Sam call you himself about needing help, or did someone else call you about him?",
+        "Did Sam tell you to send money to someone named Kevin Brooks?",
+        "Have you talked to Sam directly today, on the phone number you always use for him?",
+        "Did anyone ask you to keep this a secret from Sam's parents?"
+      ],
+      "if_scam": "If any of this feels off, please don't send the money. The best thing to do is call Sam or his parents directly on the phone number you already have for them, just to make sure everything is okay."
+    }
+  },
+  "53d6432e087299e7": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:29:02+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "late_night",
+      "note": "Bail for my grandson Sam tonight - please hurry, do not tell his parents"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Kevin Brooks before.",
+        "The amount is much larger than you usually send.",
+        "The payment is being sent late at night.",
+        "The note mentions bail for a grandson, which is a common scam.",
+        "The note asks you to hurry and keep it a secret."
+      ],
+      "reason": "This payment has many signs of a scam, including a new recipient, a large amount, and a note asking for bail money and secrecy."
+    }
+  },
+  "1bb4c88d388059c7": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T12:29:06+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "late_night",
+      "note": "Bail for my grandson Sam tonight - please hurry, do not tell his parents",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "You have never paid Kevin Brooks before.",
+          "The amount is much larger than you usually send.",
+          "The payment is being sent late at night.",
+          "The note mentions bail for a grandson, which is a common scam.",
+          "The note asks you to hurry and keep it a secret.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: new recipients need a guardian."
+        ],
+        "reason": "This payment has many signs of a scam, including a new recipient, a large amount, and a note asking for bail money and secrecy."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for 800 dollars.",
+      "questions": [
+        "Can you tell me who Kevin Brooks is?",
+        "Have you spoken directly to Sam today, using the phone number you always use for him?",
+        "Did anyone tell you to keep this payment a secret from Sam's parents?",
+        "Did Sam tell you he needed bail money, or did someone else?"
+      ],
+      "if_scam": "If this doesn't sound right, please don't send the money. Hang up, and then call Sam's parents on the number you already have for them to check if everything is okay."
+    }
   }
 }

@@ -59,12 +59,12 @@ This is the key moment, so slow down here.
 | Do | Say |
 | --- | --- |
 | Switch the senior tab to `/phone.html`. Tap the **Sunday Garden Show** card (or press **C**). The phone rings. | "Grandma Rose is watching her garden show when an unknown number calls." |
-| Tap **Accept**. Let the call play: the voice speaks and captions appear. | Stay quiet and let the judges hear it: *"Grandma, it's me… I need $800 for bail tonight… send it to my lawyer, Mike Turner… don't tell Mom and Dad."* |
-| When the call ends, tap the glowing **Family Guardian** icon. The form is already filled in with Mike Turner, $800 and the note. Tap **Send**. | "She does exactly what he asked. She opens her payment app and sends $800." |
+| Tap **Accept**. Let the call play: the voice speaks and captions appear. | Stay quiet and let the judges hear it: *"Grandma, it's me… I need $800 for bail tonight… send it to my lawyer, Kevin Brooks… don't tell Mom and Dad."* |
+| When the call ends, tap the glowing **Family Guardian** icon. The form is already filled in with Kevin Brooks, $800 and the note. Tap **Send**. | "She does exactly what he asked. She opens her payment app and sends $800." |
 | The "Wait. This payment may be a scam" screen appears. Point at the reasons. | "Guardrail stops her, calmly, in words she understands: the amount is far above usual, the note is urgent, and bail money is a common scam. Nothing has been sent; PayPal is only holding the money." |
 | Point at **Call my family**, **Cancel** and **Send anyway**. Don't click them (Call my family opens a calling screen; End closes it). | "She stays in control. Even *Send anyway* doesn't send: it asks the family first." |
-| Switch to the email tab. The Zapier alert arrives with the subject *"Grandma Rose is trying to send $800.00 USD to Mike Turner. Shield says high risk."* | "At the same moment, her guardian gets this email through Zapier, with the reasons and a link to the dashboard." |
-| Switch to the guardian dashboard. The new Mike Turner card is at the top of *Needs your decision*. Click **Call Grandma first: what to ask** | "Before deciding, the guardian should call Grandma. Shield writes what to ask." |
+| Switch to the email tab. The Zapier alert arrives with the subject *"Grandma Rose is trying to send $800.00 USD to Kevin Brooks. Shield says high risk."* | "At the same moment, her guardian gets this email through Zapier, with the reasons and a link to the dashboard." |
+| Switch to the guardian dashboard. The new Kevin Brooks card is at the top of *Needs your decision*. Click **Call Grandma first: what to ask** | "Before deciding, the guardian should call Grandma. Shield writes what to ask." |
 | Read one or two questions from the script panel. | "*Did you talk to your grandson yourself today, using the phone number you always use for him?* It never tells her to call Mike back, because Mike may be the scammer." |
 
 If the email hasn't arrived after 15 seconds, carry on and come back to the inbox at the end of Scene 4.
@@ -73,7 +73,7 @@ If the email hasn't arrived after 15 seconds, carry on and come back to the inbo
 
 | Do | Say |
 | --- | --- |
-| On the top Mike Turner card, click **Cancel payment**. Keep the senior screen in view. | "Grandma says she never spoke to her grandson. So I cancel." |
+| On the Kevin Brooks card, click **Cancel payment**. Keep the senior screen in view. | "Grandma says she never spoke to her grandson. So I cancel." |
 | Within 2 seconds the senior screen changes to "Payment cancelled". | "PayPal voids the hold. The $800 never left her account, and her screen updates straight away." |
 | In *All payments*, click **Refund** on the School Cafe row and confirm. The status changes to **Refunded**. | "And if something gets through and turns out to be wrong later, the guardian can refund it, again through PayPal." |
 | Mention the time limit; don't wait for it. | "If no one answers within 24 hours, the hold is voided automatically. Silence means no." |
@@ -115,7 +115,7 @@ Say one of these about PayPal, depending on the startup line:
 | The Zapier email is slow | Carry on and show the inbox at the end. Keep a screenshot of an earlier alert email as a backup. |
 | Port 8000 is already in use | `Get-NetTCPConnection -LocalPort 8000`, then `Stop-Process -Id <id>`, and start the server again. |
 | Presenting between 11 pm and 5 am | The saved answers are for daytime, so Shield calls Gemini live. Rehearse at the real time, or run that rehearsal once with Gemini up so the late-night answers get saved. |
-| Two Mike Turner cards are showing | Expected: one from the demo data, one Grandma just sent. Use the top card, which is the newest. |
+| Two scam cards are showing | Expected: Mike Turner is from the demo data, Kevin Brooks is the one Grandma just sent. |
 | The screen looks wrong after a dry run | Click **Demo data** to reset everything. |
 
 ## Likely judge questions

@@ -200,8 +200,10 @@
     };
     let muted = !tts;
     function pickVoice() {
-      const voices = tts.getVoices().filter((v) => v.lang.startsWith('en'));
-      const fallback = voices.find((v) => v.lang === 'en-US') || voices[0] || null;
+      // Android reports languages as "en_US" and has one voice per language ("English United States").
+      const lang = (v) => v.lang.replace('_', '-');
+      const voices = tts.getVoices().filter((v) => lang(v).startsWith('en'));
+      const fallback = voices.find((v) => lang(v) === 'en-US') || voices.find((v) => lang(v) === 'en-GB') || null;
       Object.entries(VOICES).forEach(([who, cfg]) => {
         const match = cfg.prefer.map((name) => voices.find((v) => v.name.includes(name))).find(Boolean);
         cfg.voice = match || fallback;
@@ -224,6 +226,7 @@
       return new Promise((resolve) => {
         const { voice, rate, pitch } = VOICES[who];
         const u = new SpeechSynthesisUtterance(text);
+        u.lang = 'en-US';   // with no voice picked, the engine uses its default English voice
         if (voice) u.voice = voice;
         u.rate = rate;
         u.pitch = pitch;

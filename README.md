@@ -8,7 +8,7 @@ Built for the *Build What's Next with PayPal and AI* hackathon.
 
 ## See it in action
 
-**Demo video:** <!-- TODO: paste the video link --> link in the submission.
+**Demo video (3 min):** https://www.youtube.com/watch?v=sBBBX7tMP_4
 
 There is no public hosted copy: Gemini's free tier allows only a few requests a minute, and a
 public link would use that up. It runs locally in a couple of minutes, even with no keys

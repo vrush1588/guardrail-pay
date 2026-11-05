@@ -58,6 +58,18 @@
 <body id="top" class="bg-surface text-on-surface font-sans min-h-screen">
 
   <header class="sticky top-0 z-40 bg-surface/85 backdrop-blur-xl shadow-[0_1px_8px_rgba(0,0,0,0.04)]">
+    <!-- Demo links for visitors who land here first (e.g. the site root). Hidden with ?guide=0 for recordings. -->
+    <div id="demo-links" class="border-b border-dashed border-primary/30 bg-primary-fixed/40">
+      <div class="max-w-[1100px] mx-auto px-4 lg:px-8 h-9 flex items-center justify-end gap-2 text-label-md">
+        <span class="mr-auto sm:mr-0 text-label-sm uppercase tracking-wider text-primary font-bold">Demo</span>
+        <a href="/phone.html" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-semibold shadow-sm">
+          <span class="icon text-[16px] text-primary">smartphone</span>Grandma's phone<span class="hidden sm:inline icon text-[14px] text-on-surface-variant">open_in_new</span>
+        </a>
+        <a href="/senior.html" target="_blank" rel="noopener" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-surface-container-lowest hover:bg-surface-container-high text-on-surface font-semibold shadow-sm">
+          <span class="icon text-[16px] text-primary">payments</span>Family Pay<span class="hidden sm:inline icon text-[14px] text-on-surface-variant">open_in_new</span>
+        </a>
+      </div>
+    </div>
     <div class="max-w-[1100px] mx-auto h-16 px-4 lg:px-8 flex items-center justify-between gap-2">
       <div class="flex items-center gap-2.5 min-w-0">
         <div class="w-9 h-9 rounded-xl bg-primary-container flex items-center justify-center shrink-0">
@@ -789,6 +801,8 @@
         t.classList.toggle('text-on-surface-variant', t !== tab);
       });
     }));
+
+    if (new URLSearchParams(location.search).get('guide') === '0') $('demo-links').classList.add('hidden');
 
     refresh();
     setInterval(refresh, 3000);   // picks up payments the senior sends

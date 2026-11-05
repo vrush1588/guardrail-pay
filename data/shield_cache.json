@@ -588,5 +588,212 @@
       ],
       "if_scam": "If this doesn't sound right, please don't send the money. Hang up, and then call Sam's parents on the number you already have for them to check if everything is okay."
     }
+  },
+  "11589ecb259035bb": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-04T14:37:18+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": false,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "URGENT - your grandson needs bail money tonight"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "The amount you are sending is much larger than you usually send.",
+        "The note says this is urgent.",
+        "The note mentions your grandson needs bail money.",
+        "Scammers often pretend to be family members in trouble."
+      ],
+      "reason": "This payment looks like a scam because it is for a much larger amount than usual and mentions an urgent need for bail money for your grandson."
+    }
+  },
+  "f4b92799a928cba5": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-05T05:26:52+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Kevin Brooks before.",
+        "This payment is much larger than your usual payments.",
+        "The note mentions your grandson is in trouble and needs money quickly.",
+        "The note asks you to keep this payment a secret from his parents."
+      ],
+      "reason": "This payment has several signs of a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent, secret help for a relative in trouble."
+    }
+  },
+  "7e2c7e1222305621": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-05T05:27:10+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "You have never paid Kevin Brooks before.",
+          "This payment is much larger than your usual payments.",
+          "The note mentions your grandson is in trouble and needs money quickly.",
+          "The note asks you to keep this payment a secret from his parents.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: new recipients need a guardian."
+        ],
+        "reason": "This payment has several signs of a scam, including a new recipient, a much larger amount than usual, and a note asking for urgent, secret help for a relative in trouble."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800 to someone named Kevin Brooks.",
+      "questions": [
+        "Who is Kevin Brooks, and how do you know him?",
+        "Have you talked to Ethan yourself today, on the phone number you always use for him?",
+        "Did anyone ask you not to tell Ethan's parents about this payment?",
+        "Did anyone tell you this was very urgent and you needed to send it right away?"
+      ],
+      "if_scam": "If any of this sounds like someone might be trying to trick you, please don't send the money. Hang up the phone, and then call Ethan or his parents directly on the phone number you already have for them, just to be sure."
+    }
+  },
+  "d14884ac2693bdb5": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-05T05:27:27+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "late_night",
+      "note": "Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "You have never paid Kevin Brooks before.",
+        "This payment is much larger than your usual payments.",
+        "The note asks you to keep this payment a secret.",
+        "The note says your grandson is in trouble and needs money urgently.",
+        "It is late at night, which can be a risky time to send money."
+      ],
+      "reason": "This payment has many signs of a scam, including a new recipient, a large amount, and pressure to send money secretly for a relative in trouble."
+    }
+  },
+  "5658c997652f9560": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-05T05:27:45+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": true,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "late_night",
+      "note": "Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "You have never paid Kevin Brooks before.",
+          "This payment is much larger than your usual payments.",
+          "The note asks you to keep this payment a secret.",
+          "The note says your grandson is in trouble and needs money urgently.",
+          "It is late at night, which can be a risky time to send money.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: new recipients need a guardian."
+        ],
+        "reason": "This payment has many signs of a scam, including a new recipient, a large amount, and pressure to send money secretly for a relative in trouble."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800.",
+      "questions": [
+        "Can you tell me who Kevin Brooks is?",
+        "Did you talk to Ethan yourself today, on the phone number you always use for him?",
+        "Why did Ethan ask you to send money to Kevin Brooks, and not directly to him or his parents?",
+        "Did anyone tell you not to tell Ethan's parents about this payment?"
+      ],
+      "if_scam": "If any of this feels strange or not quite right, please do not send the money. Hang up, and then call Ethan or his parents directly on the phone number you already have for them to check."
+    }
+  },
+  "c8a59baec4178212": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-05T06:54:48+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": false,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents"
+    },
+    "result": {
+      "risk_level": "high",
+      "signals": [
+        "The amount is much larger than you usually send to Kevin Brooks.",
+        "The note mentions your grandson is in trouble and needs money urgently.",
+        "The note asks you to keep this payment a secret from his parents."
+      ],
+      "reason": "This payment looks like a scam because of the unusual amount and the note asking for urgent, secret help for a relative in trouble."
+    }
+  },
+  "9f1569578b9c3055": {
+    "model": "gemini-2.5-flash",
+    "saved_at": "2026-11-05T06:55:24+00:00",
+    "input": {
+      "sender": "Grandma Rose",
+      "recipient_name": "Kevin Brooks",
+      "recipient_is_new": false,
+      "amount": 800.0,
+      "currency": "USD",
+      "usual_amount": 40.0,
+      "local_hour": "day",
+      "note": "Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents",
+      "held_because": {
+        "risk_level": "high",
+        "signals": [
+          "The amount is much larger than you usually send to Kevin Brooks.",
+          "The note mentions your grandson is in trouble and needs money urgently.",
+          "The note asks you to keep this payment a secret from his parents.",
+          "Family rule: payments over $50 need a guardian.",
+          "Family rule: Kevin Brooks was added less than 30 minutes ago."
+        ],
+        "reason": "This payment looks like a scam because of the unusual amount and the note asking for urgent, secret help for a relative in trouble."
+      },
+      "kind": "call_script"
+    },
+    "result": {
+      "opening": "Hi Grandma Rose, I'm calling about a payment you tried to send for $800.",
+      "questions": [
+        "Did Ethan call you directly from a number you know, or did someone else contact you about him needing help?",
+        "Have you spoken to Ethan's parents today about him needing money for a flight?",
+        "Do you know Kevin Brooks, the person this payment is going to, and why he would be helping Ethan?",
+        "Did anyone tell you to keep this payment a secret from Ethan's parents?"
+      ],
+      "if_scam": "If any of this feels wrong, please don't send the money. Hang up, and then call Ethan or his parents directly on the phone numbers you already have for them to check if everything is okay."
+    }
   }
 }

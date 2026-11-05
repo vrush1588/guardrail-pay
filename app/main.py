@@ -91,6 +91,16 @@ def expire_stale_holds(now: datetime | None = None) -> list[Payment]:
 app = FastAPI(title="guardrail", lifespan=lifespan)
 
 
+@app.middleware("http")
+async def revalidate_pages(request, call_next):
+    """Browsers must check for a newer page each load, so an edit or redeploy shows straight
+    away instead of a cached copy (the ETag still makes an unchanged page a cheap 304)."""
+    response = await call_next(request)
+    if not request.url.path.startswith("/api/"):
+        response.headers["Cache-Control"] = "no-cache"
+    return response
+
+
 def process_payment(data: PaymentCreate, created_at: datetime | None = None,
                     mock: bool | None = None, alert: bool = True) -> Payment:
     """Create the PayPal order. Mock orders go straight on to hold_and_check(); sandbox

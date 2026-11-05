@@ -54,6 +54,17 @@
           <span class="block text-[17px] font-semibold mb-1.5">Who are you paying?</span>
           <input name="recipient_name" required class="w-full h-12 px-3 text-[18px] rounded-lg border border-keyline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
         </label>
+        <!-- Display only, so the screen looks like a real PayPal "Send". Not sent to the API. -->
+        <label class="block">
+          <span class="block text-[17px] font-semibold mb-1.5">Their email or mobile number</span>
+          <div class="relative">
+            <input name="recipient_contact" type="text" inputmode="email" autocomplete="off" placeholder="name@email.com or phone"
+                   class="w-full h-12 pl-3 pr-12 text-[18px] rounded-lg border border-keyline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
+            <span class="absolute right-3 top-1/2 -translate-y-1/2 text-muted" title="Scan a PayPal QR code" aria-hidden="true">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M4 4h6v6H4V4zm10 0h6v6h-6V4zM4 14h6v6H4v-6zm10 0h2v2h-2v-2zm4 0h2v2h-2v-2zm-4 4h2v2h-2v-2zm4 0h2v2h-2v-2z"/></svg>
+            </span>
+          </div>
+        </label>
         <label class="block">
           <span class="block text-[17px] font-semibold mb-1.5">Amount ($)</span>
           <input name="amount" type="number" min="0.01" step="0.01" required class="w-full h-12 px-3 text-[18px] rounded-lg border border-keyline focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary">
@@ -282,8 +293,8 @@
     const FILLS = {
       // The scam from the phone.html call (also the quick-fill). Not in the demo data, so after
       // "Demo data" Kevin is still a new recipient and Shield's saved answers match.
-      call: { recipient_name: 'Kevin Brooks', amount: 800, note: 'Bail for my grandson Sam tonight - please hurry, do not tell his parents' },
-      safe: { recipient_name: 'School Cafe', amount: 5, note: 'Lunch' },
+      call: { recipient_name: 'Kevin Brooks', recipient_contact: '+1 (555) 014-7731', amount: 800, note: 'Flight home for my grandson Ethan - robbed in Mexico, please hurry, do not tell his parents' },
+      safe: { recipient_name: 'School Cafe', recipient_contact: 'cafe@school.example', amount: 5, note: 'Lunch' },
     };
     function fill(key) {
       const form = $('send-form');

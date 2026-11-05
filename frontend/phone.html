@@ -43,6 +43,23 @@
         <p id="date" class="mt-2 text-[17px] font-medium text-ink/70"></p>
       </div>
 
+      <!-- Demo guide for first-time visitors. Hidden once the call starts, with ×, or with ?guide=0 (for recordings). -->
+      <div id="guide" class="mb-4 rounded-2xl border-2 border-dashed border-primary/40 bg-white/90 backdrop-blur p-3.5 shadow-sm">
+        <div class="flex items-start justify-between gap-2">
+          <p class="text-[12px] font-bold uppercase tracking-wide text-primary">Demo guide</p>
+          <button type="button" id="guide-close" aria-label="Hide demo guide" class="-mt-1 -mr-1 w-7 h-7 rounded-full text-muted hover:bg-wash text-lg leading-none">×</button>
+        </div>
+        <p class="mt-1 text-[14.5px] leading-snug text-ink">This is Grandma Rose's phone. A scammer is about to call her, pretending to be her grandson.</p>
+        <div class="mt-3 grid gap-2">
+          <button type="button" id="guide-call" class="w-full py-2.5 rounded-xl bg-primary hover:bg-primary-hover text-white font-semibold text-[15px]">📞 Start the scam call</button>
+          <div class="grid grid-cols-2 gap-2">
+            <a href="/senior.html?fill=call" class="text-center py-2 rounded-xl bg-wash hover:bg-hairline text-ink font-semibold text-[13.5px]">Skip to payment app</a>
+            <a href="/guardian.html" target="_blank" rel="noopener" class="text-center py-2 rounded-xl bg-wash hover:bg-hairline text-ink font-semibold text-[13.5px]">Open guardian view ↗</a>
+          </div>
+        </div>
+        <p class="mt-2.5 text-[12px] text-muted">For demo purposes only. The call, people and phone numbers are fictional, and PayPal runs in Sandbox, so no real money moves.</p>
+      </div>
+
       <!-- Tapping the show starts the scam call (presenter control; key C does the same). -->
       <button type="button" id="now-watching" class="text-left rounded-2xl overflow-hidden shadow-sm bg-white/80 backdrop-blur border border-white">
         <div class="h-32 bg-gradient-to-br from-emerald-400 via-lime-300 to-amber-200 flex items-center justify-center">
@@ -62,7 +79,7 @@
         <div class="w-9 h-9 rounded-lg bg-primary text-white flex items-center justify-center flex-shrink-0">
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6l4 2m5-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
         </div>
-        <p class="text-[15.5px] font-medium leading-snug">Sam needs $800 for Kevin Brooks. Open <span class="font-bold">Family Guardian</span> to send it.</p>
+        <p class="text-[15.5px] font-medium leading-snug">Ethan needs $800 for Kevin Brooks. Open <span class="font-bold">Family Guardian</span> to send it.</p>
       </div>
 
       <div class="mt-auto pt-8 grid grid-cols-4 gap-y-5 text-center text-[12.5px] font-medium text-ink/80">
@@ -142,13 +159,13 @@
 
     // The scam call: "them" is the scammer, "me" is Grandma. Each line is spoken and captioned.
     const SCRIPT = [
-      ['them', "Grandma? Grandma, it's me. Can you hear me?"],
-      ['me',   'Sam? You sound different.'],
-      ['them', "I've got a bad cold. Grandma, I'm in really big trouble."],
-      ['them', "I was in a car accident. The police say it was my fault, and they're keeping me in jail."],
-      ['me',   'Oh no! Are you hurt?'],
-      ['them', "I'm okay, but I need eight hundred dollars for bail tonight, or I have to stay here."],
-      ['them', 'My lawyer is Kevin Brooks. Please send it to him on your payment app, right now.'],
+      ['them', "Grandma? Grandma, it's me, Ethan. Can you hear me?"],
+      ['me',   'Ethan? You sound different.'],
+      ['them', "The line is bad, I'm calling from a hotel phone. Grandma, I'm in really big trouble."],
+      ['them', "I'm in Mexico with friends, and someone stole my wallet, my phone and my passport."],
+      ['me',   'Oh no! Are you safe?'],
+      ['them', "I'm okay, but I need eight hundred dollars for a flight home tonight, or I'm stuck here."],
+      ['them', 'The travel agent is Kevin Brooks. His number is 555-014-7731. Please send it to him on PayPal, right now.'],
       ['them', "And please, please don't tell Mom and Dad. They'll be so angry. Promise me?"],
       ['me',   "I promise. I'll send it now."],
       ['them', 'Thank you, Grandma. I have to go. Hurry!'],
@@ -192,7 +209,7 @@
 
     // ---- voice ----
     const tts = 'speechSynthesis' in window ? window.speechSynthesis : null;
-    // Sam sounds young and rushed; Grandma slower and lower. Same voice twice still works.
+    // Ethan sounds young and rushed; Grandma slower and lower. Same voice twice still works.
     const VOICES = {
       // Male voices only ("Google US English" is female, so it is not listed).
       them: { prefer: ['Guy', 'Andrew', 'Christopher', 'Brian', 'Eric', 'Ryan', 'Google UK English Male', 'David', 'Mark'], rate: 1.05, pitch: 1.1, voice: null },
@@ -207,10 +224,10 @@
       Object.entries(VOICES).forEach(([who, cfg]) => {
         const match = cfg.prefer.map((name) => voices.find((v) => v.name.includes(name))).find(Boolean);
         cfg.voice = match || fallback;
-        // No male voice installed: pitch the fallback down so Sam still doesn't sound like Grandma.
+        // No male voice installed: pitch the fallback down so Ethan still doesn't sound like Grandma.
         if (who === 'them') cfg.pitch = match ? 1.1 : 0.6;
       });
-      console.log('[phone] voices', { sam: VOICES.them.voice?.name, grandma: VOICES.me.voice?.name },
+      console.log('[phone] voices', { ethan: VOICES.them.voice?.name, grandma: VOICES.me.voice?.name },
                   'available:', voices.map((v) => v.name));
     }
     if (tts) {
@@ -255,6 +272,7 @@
 
     function incoming() {
       if (!$('view-home').classList.contains('hidden')) {
+        $('guide').classList.add('hidden');   // the story has started; the hint takes over after the call
         $('hint').classList.add('hidden');
         show('view-incoming');
         ring();
@@ -314,6 +332,9 @@
     setMuted(muted);
 
     $('now-watching').addEventListener('click', incoming);
+    $('guide-call').addEventListener('click', incoming);
+    $('guide-close').addEventListener('click', () => $('guide').classList.add('hidden'));
+    if (new URLSearchParams(location.search).get('guide') === '0') $('guide').classList.add('hidden');
     $('btn-accept').addEventListener('click', accept);
     $('btn-decline').addEventListener('click', () => goHome(false));
     $('btn-hangup').addEventListener('click', () => endCall(false));

@@ -212,6 +212,53 @@
     </div>
   </nav>
 
+  <!-- Demo only: a phone-style email notification when a new payment is held.
+       The real alert is the Zapier email (app/services/alerts.py); this just makes it visible on camera. -->
+  <button type="button" id="mail-notif" aria-live="polite"
+          class="fixed top-3 left-3 right-3 lg:left-auto lg:right-6 lg:w-[400px] z-[60] text-left bg-white/95 backdrop-blur rounded-2xl shadow-2xl border border-slate-200 p-3.5 flex gap-3 -translate-y-[140%] transition-transform duration-500 ease-out">
+    <span class="w-10 h-10 rounded-full bg-[#ff4f00] text-white flex items-center justify-center flex-shrink-0 text-[18px] font-bold">Z</span>
+    <span class="flex-1 min-w-0">
+      <span class="flex items-center gap-1.5 text-[12px] text-slate-500">
+        <span class="icon text-[14px]">mail</span><span class="font-semibold text-slate-700">Zapier</span><span>·</span><span>now</span>
+      </span>
+      <span id="mail-subject" class="block text-[15px] font-semibold text-slate-900 leading-snug mt-0.5 line-clamp-2"></span>
+      <span id="mail-preview" class="block text-[13.5px] text-slate-600 leading-snug mt-0.5 line-clamp-2"></span>
+    </span>
+  </button>
+
+  <!-- The full email, opened by tapping the notification. Same fields the Zap's email uses. -->
+  <div id="mail-sheet" class="hidden fixed inset-0 z-[70] bg-black/40 flex items-end lg:items-center justify-center">
+    <div class="w-full lg:w-[460px] max-h-[90vh] overflow-y-auto bg-white rounded-t-3xl lg:rounded-2xl shadow-2xl">
+      <div class="flex items-center gap-2 px-4 pt-4 pb-2">
+        <button type="button" id="mail-close" aria-label="Back" class="w-9 h-9 rounded-full hover:bg-slate-100 flex items-center justify-center">
+          <span class="icon text-[22px] text-slate-700">arrow_back</span>
+        </button>
+        <span class="text-[13px] font-semibold text-slate-500">Inbox</span>
+      </div>
+      <div class="px-5 pb-6">
+        <h2 id="sheet-subject" class="text-[19px] font-semibold text-slate-900 leading-snug"></h2>
+        <div class="mt-4 flex items-center gap-3">
+          <span class="w-10 h-10 rounded-full bg-[#ff4f00] text-white flex items-center justify-center text-[18px] font-bold flex-shrink-0">Z</span>
+          <div class="min-w-0 flex-1">
+            <p class="text-[14.5px] font-semibold text-slate-900">Zapier <span class="font-normal text-slate-500">via Email by Zapier</span></p>
+            <p class="text-[12.5px] text-slate-500">to me · <span id="sheet-time"></span></p>
+          </div>
+        </div>
+        <div class="mt-5 text-[15px] text-slate-800 leading-relaxed space-y-3">
+          <p id="sheet-reason"></p>
+          <div>
+            <p class="font-semibold">Why Shield held it:</p>
+            <ul id="sheet-signals" class="mt-1 list-disc pl-5 space-y-0.5"></ul>
+          </div>
+          <p><span class="font-semibold">Note:</span> <span id="sheet-note" class="italic"></span></p>
+          <p class="text-slate-600">The money is held by PayPal. Nothing is sent until you decide.</p>
+        </div>
+        <button type="button" id="sheet-review" class="mt-6 w-full py-3 rounded-xl bg-primary text-white font-semibold text-[15px]">Review in Family Guardian</button>
+        <p class="mt-6 pt-4 border-t border-slate-200 text-[11.5px] text-slate-400">Sent by your Guardrail Zap · Webhooks by Zapier → Email by Zapier</p>
+      </div>
+    </div>
+  </div>
+
   <!-- Toast -->
   <div id="toast" class="fixed bottom-20 lg:bottom-6 left-4 right-4 lg:left-auto lg:right-8 lg:w-[380px] z-50 bg-inverse-surface text-inverse-on-surface px-3 py-2.5 rounded-xl shadow-lg flex items-center gap-2 opacity-0 pointer-events-none transition-opacity duration-300">
     <span class="icon text-primary-fixed text-[20px]">check_circle</span>
@@ -593,11 +640,61 @@
       }));
     }
 
+    // ---- demo email notification ----
+    // Payments already held when the page opens don't notify; only ones that get held while it's open.
+    let notifiedIds = null;
+    let mailTimer = null;
+    function notifyNewHolds(payments) {
+      const held = payments.filter((p) => p.status === 'held_for_guardian');
+      if (notifiedIds === null) {
+        notifiedIds = new Set(held.map((p) => p.id));
+        return;
+      }
+      const fresh = held.filter((p) => !notifiedIds.has(p.id));
+      fresh.forEach((p) => notifiedIds.add(p.id));
+      const p = fresh[fresh.length - 1];
+      if (!p) return;
+      mailPayment = p;
+      // Same wording as the Zap's subject line (app/services/alerts.py HEADLINES["payment_held"]).
+      const subject = `${p.sender} is trying to send ${money(p.amount)} ${p.currency} to ${p.recipient_name}. `
+        + `Shield says ${p.risk?.risk_level || 'unknown'} risk.`;
+      $('mail-subject').textContent = subject;
+      $('mail-preview').textContent = p.risk?.reason || 'Open Family Guardian to approve or cancel.';
+      $('sheet-subject').textContent = subject;
+      $('sheet-time').textContent = clock(new Date().toISOString());
+      $('sheet-reason').textContent = p.risk?.reason || '';
+      $('sheet-signals').replaceChildren(...(p.risk?.signals || []).map((s) => {
+        const li = document.createElement('li');
+        li.textContent = s;
+        return li;
+      }));
+      $('sheet-note').textContent = p.note ? `"${p.note}"` : '(none)';
+      $('mail-notif').classList.remove('-translate-y-[140%]');
+      clearTimeout(mailTimer);
+      mailTimer = setTimeout(hideMail, 15000);
+    }
+    let mailPayment = null;
+    function hideMail() {
+      $('mail-notif').classList.add('-translate-y-[140%]');
+    }
+    function closeSheet() {
+      $('mail-sheet').classList.add('hidden');
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    $('mail-notif').addEventListener('click', () => {
+      hideMail();
+      if (mailPayment) $('mail-sheet').classList.remove('hidden');
+    });
+    $('mail-close').addEventListener('click', closeSheet);
+    $('sheet-review').addEventListener('click', closeSheet);
+    $('mail-sheet').addEventListener('click', (e) => { if (e.target === $('mail-sheet')) closeSheet(); });
+
     async function refresh() {
       try {
         const [payments, audit, latestRules] = await Promise.all([api('/api/payments'), api('/api/audit'), api('/api/rules')]);
         lastPayments = payments;
         rules = latestRules;
+        notifyNewHolds(payments);
         renderHeld(payments);
         renderTelemetry(payments);
         renderMembers(payments);

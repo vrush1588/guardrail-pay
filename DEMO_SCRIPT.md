@@ -27,8 +27,8 @@ answers are kept separately for daytime and for 11 pm–5 am.
 
 Show the guardian dashboard, empty. Speak to camera.
 
-> "Grandma Rose gets a call: *your grandson is in jail, send $800 bail tonight, and don't tell
-> his parents.* By the time anyone in the family hears about it, the money is gone. Kids buying
+> "Grandma Rose gets a call: *your grandson was robbed in Mexico, send $800 for a flight home
+> tonight, and don't tell his parents.* By the time anyone in the family hears about it, the money is gone. Kids buying
 > game items at midnight is the same problem on a smaller scale.
 >
 > Banks warn the person being pressured, and they're the one least able to stop and think.
@@ -57,10 +57,10 @@ This is the key moment, so slow down here.
 
 | Do | Say |
 | --- | --- |
-| Switch the senior tab to `/phone.html`. Tap the **Sunday Garden Show** card (or press **C**). The phone rings. | "Grandma Rose is watching her garden show when an unknown number calls." |
-| Tap **Accept**. Let the call play: the voice speaks and captions appear. | Stay quiet and let the judges hear it: *"Grandma, it's me… I need $800 for bail tonight… send it to my lawyer, Kevin Brooks… don't tell Mom and Dad."* |
+| Switch the senior tab to `/phone.html?guide=0` (hides the demo guide card). Tap the **Sunday Garden Show** card (or press **C**). The phone rings. | "Grandma Rose is watching her garden show when an unknown number calls." |
+| Tap **Accept**. Let the call play: the voice speaks and captions appear. | Stay quiet and let the judges hear it: *"Grandma, it's me, Ethan… someone stole my wallet and passport… I need $800 for a flight home tonight… send it to the travel agent, Kevin Brooks… don't tell Mom and Dad."* |
 | When the call ends, tap the glowing **Family Guardian** icon. The form is already filled in with Kevin Brooks, $800 and the note. Tap **Send**. | "She does exactly what he asked. She opens her payment app and sends $800." |
-| The "Wait. This payment may be a scam" screen appears. Point at the reasons. | "Guardrail stops her, calmly, in words she understands: the amount is far above usual, the note is urgent, and bail money is a common scam. Nothing has been sent; PayPal is only holding the money." |
+| The "Wait. This payment may be a scam" screen appears. Point at the reasons. | "Guardrail stops her, calmly, in words she understands: the amount is far above usual, the note is urgent, and it asks her to keep a secret from the family. Nothing has been sent; PayPal is only holding the money." |
 | Point at **Call my family**, **Cancel** and **Send anyway**. Don't click them (Call my family opens a calling screen; End closes it). | "She stays in control. Even *Send anyway* doesn't send: it asks the family first." |
 | Switch to the email tab. The Zapier alert arrives with the subject *"Grandma Rose is trying to send $800.00 USD to Kevin Brooks. Shield says high risk."* | "At the same moment, her guardian gets this email through Zapier, with the reasons and a link to the dashboard." |
 | Switch to the guardian dashboard. The new Kevin Brooks card is at the top of *Needs your decision*. Click **Call Grandma first: what to ask** | "Before deciding, the guardian should call Grandma. Shield writes what to ask." |

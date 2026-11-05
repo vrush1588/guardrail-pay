@@ -6,23 +6,25 @@ the funds and a family guardian decides whether it goes through.
 
 Built for the *Build What's Next with PayPal and AI* hackathon.
 
-## Try it live
+## See it in action
 
-**https://guardrail-pay.onrender.com** <!-- TODO: replace with the real Render URL -->
+**Demo video:** <!-- TODO: paste the video link --> link in the submission.
 
-Best viewed on a phone, or in two browser windows side by side:
+There is no public hosted copy: Gemini's free tier allows only a few requests a minute, and a
+public link would use that up. It runs locally in a couple of minutes, even with no keys
+(see [Run it](#run-it)). Then, in two browser windows side by side or on a phone:
 
-1. Open **[/guardian.html](https://guardrail-pay.onrender.com/guardian.html)** (the family guardian, Sarah) and tap **Demo data**.
-2. Open **[/phone.html](https://guardrail-pay.onrender.com/phone.html)** (Grandma Rose's phone). Turn the sound up,
+1. Open **http://127.0.0.1:8000/guardian.html** (the family guardian, Sarah) and tap **Demo data**.
+2. Open **http://127.0.0.1:8000/phone.html** (Grandma Rose's phone). Turn the sound up,
    tap the *Sunday Garden Show* card and accept the call.
 3. When the call ends, tap **Family Guardian**: the payment is already filled in. Tap **Send**.
-4. PayPal Sandbox opens. Log in with **any PayPal Sandbox Personal account**, yours or the test login
-   in our submission notes, and approve. No real money moves.
+4. With the PayPal Sandbox on, PayPal opens: log in with **any PayPal Sandbox Personal account**,
+   yours or the test login in our submission notes, and approve. No real money moves.
+   (Without PayPal keys, the app uses mock PayPal and skips this step.)
 5. Grandma sees "Wait. This payment may be a scam." On the guardian page, open the new card, tap
    **Call Grandma first: what to ask**, then **Cancel payment**. PayPal voids the hold.
 
-The free server sleeps when idle: the first visit can take about a minute, and it starts with no
-data (tap **Demo data**). If PayPal says it doesn't accept your currency, use our US test login.
+If PayPal says it doesn't accept your currency, use our US test login.
 
 **Install it as phone apps.** Both screens are installable web apps (PWAs). On Android Chrome, open
 `/senior.html` and choose **⋮ → Install app** (or *Add to Home screen*) to get **Family Pay**, then do
@@ -199,8 +201,8 @@ Alerts are sent in the background, so a slow or failing webhook never delays a p
      over the $50 family cap → **medium** → **held**
 2. **Senior → click "School Cafe $5" → Send.** The payment goes through: "Payment sent".
 3. **Senior → click "Kevin Brooks $800" → Send** (or play the scam call on `/phone.html`).
-   The note says *"Bail for my grandson Sam tonight - please hurry, do not tell his
-   parents"*, and Shield rates it **high** → **blocked**. The senior sees *"Wait. This payment may be a
+   The note says *"Flight home for my grandson Ethan - robbed in Mexico, please hurry, do
+   not tell his parents"*, and Shield rates it **high** → **blocked**. The senior sees *"Wait. This payment may be a
    scam"* with Shield's reasons, and can Call my family, Cancel, or Send anyway (which
    asks the family).
 4. **Guardian:** the payment appears under *Needs your decision* with Shield's reasons
